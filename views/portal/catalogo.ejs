@@ -1,0 +1,35 @@
+<div class="max-w-7xl mx-auto py-20 px-4">
+    <div class="text-center mb-16">
+        <h2 class="text-4xl font-extrabold text-white">Nuestro <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-pink-500">Catálogo</span></h2>
+    </div>
+
+    <% 
+        // Lógica simple para agrupar (Si no tienes columna 'categoria', usa 'General')
+        const categorias = [...new Set(servicios.map(s => s.categoria || 'Servicios Generales'))];
+    %>
+
+    <% categorias.forEach(cat => { %>
+        <section class="mb-16">
+            <h3 class="text-2xl font-bold text-white mb-8 border-l-4 border-pink-500 pl-4"><%= cat %></h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <% servicios.filter(s => (s.categoria || 'Servicios Generales') === cat).forEach(servicio => { %>
+                    <!-- Tarjeta con imagen de fondo y efecto Zoom -->
+                    <div class="relative overflow-hidden bg-slate-900 border border-slate-800 rounded-2xl p-8 flex flex-col items-start gap-4 shadow-xl hover:border-blue-500/50 transition-all group h-80">
+                        
+                        <!-- Imagen de fondo con zoom -->
+                        <div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 ease-out group-hover:scale-110 z-0" 
+                             style="background-image: linear-gradient(to bottom, rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0.95)), url('<%= servicio.imagen ? `/uploads/${servicio.imagen}` : `/img/servicio1.jpg` %>');">
+                        </div>
+
+                        <h3 class="relative z-10 text-xl font-bold text-white mt-auto"><%= servicio.nombre %></h3>
+                        <p class="relative z-10 text-slate-400 text-sm italic">Duración: <%= servicio.duracion %> días</p>
+                        <div class="relative z-10 w-full pt-4 border-t border-slate-700/50 font-extrabold text-pink-500 text-lg">
+                            $<%= Number(servicio.precio).toLocaleString() %>
+                        </div>
+                    </div>
+                <% }) %>
+            </div>
+        </section>
+    <% }) %>
+</div>

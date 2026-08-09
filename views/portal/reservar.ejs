@@ -1,0 +1,189 @@
+<div class="min-h-[85vh] flex items-center justify-center px-4 sm:px-8 py-12">
+    <div class="w-full max-w-2xl bg-slate-900/80 backdrop-blur-xl border border-slate-800 rounded-3xl p-8 sm:p-12 shadow-2xl">
+        
+        <!-- HEADER DE RESERVA -->
+        <div class="text-center mb-10">
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-2">
+                Reserva tu <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-400 to-pink-500">Turno</span>
+            </h1>
+            <p class="text-slate-400 text-sm sm:text-base">Búho Barber Studio</p>
+        </div>
+
+        <!-- FORMULARIO -->
+        <form id="formReserva" class="space-y-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                
+                <!-- Tu Nombre -->
+                <div class="space-y-2">
+                    <label for="nombre" class="block text-xs font-semibold uppercase tracking-wider text-slate-300">Tu Nombre</label>
+                    <input type="text" id="nombre" name="nombre" placeholder="Ej. Juan Pérez" required
+                        class="w-full bg-slate-950/60 border border-slate-800 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all">
+                </div>
+
+                <!-- Teléfono / WhatsApp -->
+                <div class="space-y-2">
+                    <label for="telefono" class="block text-xs font-semibold uppercase tracking-wider text-slate-300">Teléfono / WhatsApp</label>
+                    <input type="tel" id="telefono" name="telefono" placeholder="Ej. 3804..." required
+                        class="w-full bg-slate-950/60 border border-slate-800 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all">
+                </div>
+
+                <!-- Servicio (Ocupa todo el ancho) -->
+                <div class="space-y-2 sm:col-span-2">
+                    <label for="servicio_id" class="block text-xs font-semibold uppercase tracking-wider text-slate-300">Selecciona el Servicio</label>
+                    <select id="servicio_id" name="servicio_id" required
+                        class="w-full bg-slate-950/60 border border-slate-800 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all">
+                        <option value="" disabled selected>Cargando servicios...</option>
+                    </select>
+                </div>
+
+                <!-- Barbero / Staff (Nuevo campo obligatorio para estadísticas) -->
+                <div class="space-y-2 sm:col-span-2">
+                    <label for="barbero_id" class="block text-xs font-semibold uppercase tracking-wider text-slate-300">Selecciona tu Barbero</label>
+                    <select id="barbero_id" name="barbero_id" required
+                        class="w-full bg-slate-950/60 border border-slate-800 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all">
+                        <option value="" disabled selected>Cargando barberos...</option>
+                    </select>
+                </div>
+
+                <!-- Fecha -->
+                <div class="space-y-2">
+                    <label for="fecha" class="block text-xs font-semibold uppercase tracking-wider text-slate-300">Fecha</label>
+                    <input type="date" id="fecha" name="fecha" required
+                        class="w-full bg-slate-950/60 border border-slate-800 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all">
+                </div>
+
+                <!-- Horario -->
+                <div class="space-y-2">
+                    <label for="hora" class="block text-xs font-semibold uppercase tracking-wider text-slate-300">Horario</label>
+                    <select id="hora" name="hora" required
+                        class="w-full bg-slate-950/60 border border-slate-800 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all">
+                        <option value="" disabled selected>Selecciona hora...</option>
+                        <option value="16:00">16:00 hs</option>
+                        <option value="17:00">17:00 hs</option>
+                        <option value="18:00">18:00 hs</option>
+                        <option value="19:00">19:00 hs</option>
+                        <option value="20:00">20:00 hs</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Botón de Envío -->
+            <button type="submit" class="w-full mt-6 py-4 bg-gradient-to-r from-blue-600 to-pink-600 hover:from-blue-500 hover:to-pink-500 text-white font-bold text-sm rounded-xl shadow-[0_4px_20px_rgba(236,72,153,0.4)] transition-all flex items-center justify-center gap-2.5 cursor-pointer">
+                <i class="fa-solid fa-calendar-check"></i> CONFIRMAR RESERVA
+            </button>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', async () => {
+        // Cargar Servicios y Barberos en paralelo
+        try {
+            const [resServicios, resBarberos] = await Promise.all([
+                fetch('/api/servicios'),
+                fetch('/api/barberos') // Endpoint estándar para listar staff de barberos
+            ]);
+
+            if (resServicios.ok) {
+                const servicios = await resServicios.json();
+                const selectServicio = document.getElementById('servicio_id');
+                selectServicio.innerHTML = '<option value="" disabled selected>Elige un servicio...</option>';
+                servicios.forEach(s => {
+                    selectServicio.innerHTML += `<option value="${s.id}">${s.nombre} - $${s.precio}</option>`;
+                });
+            }
+
+            if (resBarberos.ok) {
+                const barberos = await resBarberos.json();
+                const selectBarbero = document.getElementById('barbero_id');
+                selectBarbero.innerHTML = '<option value="" disabled selected>Elige un barbero...</option>';
+                barberos.forEach(b => {
+                    selectBarbero.innerHTML += `<option value="${b.id}">${b.nombre} (${b.especialidad || 'Estilista'})</option>`;
+                });
+            } else {
+                // Fallback estático si la API del staff se conecta de otra forma en tu backend
+                const selectBarbero = document.getElementById('barbero_id');
+                selectBarbero.innerHTML = `
+                    <option value="" disabled selected>Elige un barbero...</option>
+                    <option value="1">Axel "Master Fade"</option>
+                    <option value="2">Lucas "Blade"</option>
+                    <option value="3">Franco "Stylist"</option>
+                `;
+            }
+        } catch (error) {
+            console.error('Error al cargar datos del formulario:', error);
+        }
+    });
+
+    document.getElementById('formReserva').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const fechaInput = document.getElementById('fecha').value;
+        const horaInput = document.getElementById('hora').value;
+        const fecha_hora = `${fechaInput} ${horaInput}:00`;
+
+        const formData = {
+            nombre: document.getElementById('nombre').value,
+            telefono: document.getElementById('telefono').value,
+            servicio_id: document.getElementById('servicio_id').value,
+            barbero_id: document.getElementById('barbero_id').value, // <--- Enviado para alimentar Estadísticas y Barbero Estrella
+            fecha_hora: fecha_hora,
+            metodo_pago: 'efectivo'
+        };
+
+        try {
+            const response = await fetch('/citas', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData)
+            });
+
+            const result = await response.json();
+            
+            if (response.ok) {
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire({
+                        icon: 'success',
+                        title: '¡Turno Registrado!',
+                        text: result.mensaje || 'La cita se creó exitosamente.',
+                        confirmButtonColor: '#ec4899',
+                        background: '#0D111A',
+                        color: '#f3f4f6'
+                    }).then(() => {
+                        window.location.reload();
+                    });
+                } else {
+                    alert('¡Turno reservado con éxito!');
+                    window.location.reload();
+                }
+            } else {
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Atención',
+                        text: result.error || 'No se pudo reservar el turno.',
+                        confirmButtonColor: '#ec4899',
+                        background: '#0D111A',
+                        color: '#f3f4f6'
+                    });
+                } else {
+                    alert('Error: ' + (result.error || 'No se pudo reservar el turno.'));
+                }
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Hubo un error al procesar la reserva.',
+                    confirmButtonColor: '#ec4899',
+                    background: '#0D111A',
+                    color: '#f3f4f6'
+                });
+            } else {
+                alert('Hubo un error al procesar la reserva.');
+            }
+        }
+    });
+</script>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acceso | Barbería Búho</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: #030712;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(59, 130, 246, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(239, 68, 68, 0.15) 0%, transparent 40%);
+            color: #f3f4f6;
+        }
+        .neon-card {
+            background: rgba(17, 24, 39, 0.7);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.6), 0 0 20px rgba(59, 130, 246, 0.1);
+        }
+        .neon-input:focus {
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
+            border-color: #3b82f6;
+        }
+        .neon-button {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 50%, #ef4444 100%);
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
+        }
+        .neon-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(239, 68, 68, 0.6), 0 0 15px rgba(59, 130, 246, 0.6);
+        }
+        .logo-glow {
+            filter: drop-shadow(0 0 12px rgba(59, 130, 246, 0.6));
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+
+    <div class="w-full max-w-md p-8 rounded-3xl neon-card relative overflow-hidden">
+        <!-- Destello decorativo superior -->
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-1 bg-gradient-to-r from-blue-500 to-red-500 shadow-[0_0_15px_#3b82f6]"></div>
+
+        <!-- 🦉 LOGO DE LA BARBERÍA -->
+        <div class="text-center mb-6 mt-2 flex flex-col items-center">
+            <div class="w-20 h-20 mb-3 rounded-full flex items-center justify-center bg-slate-900/80 border border-blue-500/30 p-2 shadow-inner">
+                <img src="/img/buho.png" alt="Logo Barbería Búho" class="w-full h-full object-contain logo-glow rounded-full">
+            </div>
+            <h1 class="text-3xl font-extrabold tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-sky-200 to-red-500"></h1>
+            <p class="text-xs uppercase tracking-[0.3em] text-slate-400 mt-1 font-semibold">Night & Style Barber</p>
+            
+            <!-- Frases dinámicas en color verde -->
+            <div id="fraseVerde" class="mt-3 text-xs font-medium text-emerald-400 tracking-wide transition-opacity duration-500 min-h-[1.5rem] flex items-center justify-center">
+                Cargando sistema...
+            </div>
+        </div>
+
+        <form id="loginForm" class="space-y-5">
+            <div>
+                <label class="block text-xs uppercase tracking-wider font-semibold text-slate-300 mb-2">Usuario o Email</label>
+                <input type="text" id="usuario" name="usuario" required 
+                    class="w-full px-4 py-3.5 bg-slate-900/80 border border-slate-800 rounded-xl text-white placeholder-slate-600 focus:outline-none neon-input transition-all text-sm"
+                    placeholder="Ej. Aythi@Admin.com">
+            </div>
+
+            <div>
+                <label class="block text-xs uppercase tracking-wider font-semibold text-slate-300 mb-2">Contraseña</label>
+                <input type="password" id="password" name="password" required 
+                    class="w-full px-4 py-3.5 bg-slate-900/80 border border-slate-800 rounded-xl text-white placeholder-slate-600 focus:outline-none neon-input transition-all text-sm"
+                    placeholder="••••••••">
+            </div>
+
+            <button type="submit" id="btnSubmit"
+                class="w-full py-4 text-white font-bold rounded-xl neon-button uppercase tracking-widest text-xs cursor-pointer">
+                Iniciar Sesión
+            </button>
+        </form>
+
+        <!-- 🟢 ALERTA DE ÉXITO (Credenciales correctas, redirigiendo...) -->
+        <div id="alertaExito" class="mt-4 p-3 rounded-xl text-xs font-semibold text-center bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 shadow-[0_0_15px_rgba(16,185,129,0.3)] hidden">
+            ✨ ¡Credenciales correctas! Redirigiendo al panel de administración...
+        </div>
+
+        <!-- ❌ Contenedor para mostrar errores -->
+        <div id="mensajeError" class="mt-4 text-center text-red-400 text-xs font-medium hidden"></div>
+
+        <div class="mt-8 text-center border-t border-slate-800/80 pt-4">
+            <p class="text-xs text-slate-500">Completa los campos para poder ingresar <a href="/" class="text-blue-400 hover:underline cursor-pointer font-medium">Volver al inicio</a></p>
+        </div>
+    </div>
+
+    <script src="/js/login.js"></script>
+    <script>
+        const frasesBuhos = [
+            "🦉 Estilo y precisión en cada corte.",
+            "✨ Bienvenido al panel de control de Barbería Búho.",
+            "🌙 Gestión nocturna y profesional activada.",
+            "⚡ Control total de citas, clientes y barberos."
+        ];
+
+        let indexFrase = 0;
+        const elementoFrase = document.getElementById('fraseVerde');
+
+        if (elementoFrase) {
+            function cambiarFrase() {
+                elementoFrase.style.opacity = 0;
+                setTimeout(() => {
+                    elementoFrase.textContent = frasesBuhos[indexFrase];
+                    elementoFrase.style.opacity = 1;
+                    indexFrase = (indexFrase + 1) % frasesBuhos.length;
+                }, 300);
+            }
+            cambiarFrase();
+            setInterval(cambiarFrase, 4000);
+        }
+    </script>
+</body>
+</html>

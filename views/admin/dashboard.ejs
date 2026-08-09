@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Panel - Estadísticas y Finanzas | Barbería Búho</title>
+  <link rel="icon" href="/img/logo.svg" type="image/x-icon" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+      body {
+          font-family: 'Outfit', sans-serif;
+          background-color: #030712;
+          color: #f3f4f6;
+      }
+      .glass-panel {
+          background: rgba(15, 23, 42, 0.75);
+          backdrop-filter: blur(12px);
+          border: 1px solid rgba(255, 255, 255, 0.06);
+      }
+      .glow-emerald { box-shadow: 0 0 25px rgba(52, 211, 153, 0.1); }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="min-h-screen flex flex-col selection:bg-emerald-500 selection:text-white">
+
+  <!-- CONTENIDO PRINCIPAL -->
+  <main class="flex-1 pt-8 px-6 md:px-8 pb-12 max-w-7xl mx-auto w-full space-y-8">
+    
+    <!-- ENCABEZADO DEL MÓDULO -->
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-slate-900/80 backdrop-blur-md border border-slate-800/80 rounded-2xl p-6 shadow-2xl">
+        <div class="flex items-center gap-4">
+            <div class="p-3 bg-gradient-to-br from-emerald-500/20 to-emerald-300/10 border border-emerald-500/30 rounded-2xl shadow-[0_0_15px_rgba(52,211,153,0.2)] text-emerald-400">
+                <i class="fa-solid fa-chart-line text-xl"></i>
+            </div>
+            <div>
+                <h1 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">Estadísticas y Finanzas</h1>
+                <p class="text-xs text-slate-400 mt-0.5">Monitoreo integral de ingresos, rendimiento de personal y métricas clave del negocio.</p>
+            </div>
+        </div>
+        <button type="button" class="bg-slate-900 hover:bg-slate-800 border border-slate-700/60 text-slate-200 px-4 py-2.5 rounded-xl text-sm transition-all duration-200 flex items-center gap-2 shadow-md cursor-pointer hover:border-emerald-500/50 active:scale-95" onclick="refrescarDatosFinancieros()">
+            <i class="fa-solid fa-rotate text-emerald-400"></i> Actualizar Métricas
+        </button>
+    </div>
+
+    <!-- A) INGRESOS MONETARIOS (Diarios, Quincenales, Mensuales, Anual) -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="glass-panel p-5 rounded-2xl glow-emerald flex flex-col justify-between">
+        <div class="flex justify-between items-start mb-2">
+          <span class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Ingreso Diario</span>
+          <span class="p-1.5 bg-emerald-500/10 text-emerald-400 rounded-lg border border-emerald-500/20"><i class="fa-solid fa-sun text-xs"></i></span>
+        </div>
+        <h2 class="text-2xl font-black text-white" id="ingreso-diario">$0</h2>
+        <span class="text-xs text-slate-500 mt-1">Corte del día actual</span>
+      </div>
+      
+      <div class="glass-panel p-5 rounded-2xl glow-emerald flex flex-col justify-between">
+        <div class="flex justify-between items-start mb-2">
+          <span class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Ingreso Quincenal</span>
+          <span class="p-1.5 bg-emerald-500/10 text-emerald-400 rounded-lg border border-emerald-500/20"><i class="fa-solid fa-calendar-week text-xs"></i></span>
+        </div>
+        <h2 class="text-2xl font-black text-emerald-400" id="ingreso-quincenal">$0</h2>
+        <span class="text-xs text-slate-500 mt-1">Últimos 15 días</span>
+      </div>
+      
+      <div class="glass-panel p-5 rounded-2xl glow-emerald flex flex-col justify-between">
+        <div class="flex justify-between items-start mb-2">
+          <span class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Ingreso Mensual</span>
+          <span class="p-1.5 bg-emerald-500/10 text-emerald-400 rounded-lg border border-emerald-500/20"><i class="fa-solid fa-calendar-days text-xs"></i></span>
+        </div>
+        <h2 class="text-2xl font-black text-white" id="ingreso-mensual">$0</h2>
+        <span class="text-xs text-slate-500 mt-1">Mes en curso</span>
+      </div>
+      
+      <div class="glass-panel p-5 rounded-2xl glow-emerald flex flex-col justify-between">
+        <div class="flex justify-between items-start mb-2">
+          <span class="text-xs uppercase tracking-wider text-slate-400 font-semibold">Ingreso Anual</span>
+          <span class="p-1.5 bg-emerald-500/10 text-emerald-400 rounded-lg border border-emerald-500/20"><i class="fa-solid fa-chart-pie text-xs"></i></span>
+        </div>
+        <h2 class="text-2xl font-black text-emerald-400" id="ingreso-anual">$0</h2>
+        <span class="text-xs text-slate-500 mt-1">Acumulado del año</span>
+      </div>
+    </div>
+
+    <!-- E) BARBERO ESTRELLA (Quincenal / Mensual) -->
+    <div class="glass-panel p-6 rounded-2xl border border-emerald-500/30 bg-gradient-to-r from-slate-900/90 via-slate-900/80 to-emerald-950/20">
+      <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        <div class="flex items-center gap-4">
+          <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-500/20 to-amber-600/10 border border-amber-500/30 flex items-center justify-center text-amber-400 text-2xl shadow-inner">
+            <i class="fa-solid fa-crown"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30 uppercase tracking-wider">Barbero Estrella</span>
+              <span class="text-xs text-slate-400">Líder en rendimiento de la quincena</span>
+            </div>
+            <h3 class="text-xl font-bold text-white mt-1" id="barbero-estrella-nombre">Cargando líder...</h3>
+            <p class="text-xs text-slate-400" id="barbero-estrella-stats">0 servicios completados · Alta satisfacción</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-6 bg-slate-950/60 border border-slate-800/80 px-5 py-3 rounded-xl">
+          <div>
+            <span class="text-[10px] uppercase tracking-wider text-slate-400 block">Comisión Generada</span>
+            <span class="text-lg font-bold text-emerald-400" id="barbero-estrella-recaudacion">$0</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- B) TURNOS/CITAS & D) SERVICIOS (Gráficos y Tendencias) -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <!-- Turnos del día y Horarios más solicitados -->
+      <div class="glass-panel p-6 rounded-2xl flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <h5 class="text-base font-bold text-white flex items-center gap-2">
+              <i class="fa-solid fa-clock text-emerald-400"></i> Horarios Más Solicitados
+            </h5>
+            <span class="text-xs text-slate-400">Picos de demanda horaria</span>
+          </div>
+          <div class="h-64 flex items-center justify-center">
+            <canvas id="grafico-horarios"></canvas>
+          </div>
+        </div>
+        <div class="mt-4 pt-4 border-t border-slate-800/80 flex justify-between items-center text-xs text-slate-300">
+          <span>Turnos programados para hoy: <strong class="text-white" id="total-turnos-hoy">0</strong></span>
+          <span class="text-emerald-400 font-semibold" id="pico-demanda">Pico: --:-- hs</span>
+        </div>
+      </div>
+      
+      <!-- Servicios Populares y Nuevas Tendencias -->
+      <div class="glass-panel p-6 rounded-2xl flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <h5 class="text-base font-bold text-white flex items-center gap-2">
+              <i class="fa-solid fa-scissors text-emerald-400"></i> Top Servicios & Tendencias
+            </h5>
+            <span class="px-2 py-0.5 rounded-md text-[10px] font-semibold bg-blue-500/10 text-blue-400 border border-blue-500/20">Demanda Reciente</span>
+          </div>
+          <div class="h-64 flex items-center justify-center">
+            <canvas id="grafico-servicios"></canvas>
+          </div>
+        </div>
+        <div class="mt-4 pt-4 border-t border-slate-800/80 text-xs text-slate-400 flex items-center justify-between">
+          <span>Tendencia en alza: <strong class="text-white" id="tendencia-servicio">Barba Botox / Estilizado</strong></span>
+          <i class="fa-solid fa-arrow-trend-up text-emerald-400"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- C) CLIENTES REGISTRADOS Y HABITUALIDAD (Para Premios y Promos) -->
+    <div class="glass-panel p-6 rounded-2xl">
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
+        <div>
+          <h5 class="text-base font-bold text-white flex items-center gap-2">
+            <i class="fa-solid fa-users text-emerald-400"></i> Fidelización de Clientes (Habitualidad)
+          </h5>
+          <p class="text-xs text-slate-400 mt-0.5">Listado de clientes frecuentes aptos para recompensas, descuentos o campañas de fidelización.</p>
+        </div>
+        <div class="flex items-center gap-2 w-full sm:w-auto">
+          <input type="text" id="buscarClienteEstadistica" placeholder="Buscar cliente..." class="bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-slate-200 focus:outline-none focus:border-emerald-500/50 w-full sm:w-64">
+        </div>
+      </div>
+
+      <div class="overflow-x-auto rounded-xl border border-slate-800/80">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="bg-slate-950/80 text-slate-400 text-xs uppercase tracking-wider border-b border-slate-800">
+              <th class="py-3 px-4">Cliente</th>
+              <th class="py-3 px-4">Teléfono</th>
+              <th class="py-3 px-4">Total Visitas</th>
+              <th class="py-3 px-4">Última Visita</th>
+              <th class="py-3 px-4">Categoría / Estado</th>
+              <th class="py-3 px-4 text-right">Acción Sugerida</th>
+            </tr>
+          </thead>
+          <tbody id="tabla-clientes-habitualidad" class="divide-y divide-slate-800/60 text-slate-300 text-sm">
+            <!-- Datos cargados dinámicamente vía JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+</main>
+
+  <script src="/js/estadisticas-finanzas.js"></script>
+</body>
+</html>

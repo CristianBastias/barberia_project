@@ -1,0 +1,39 @@
+<aside style="width: 260px; background: #0b0f19; border-right: 1px solid rgba(255,255,255,0.08); display: flex; flex-direction: column; min-height: 100vh;">
+    <!-- Logo o Título del Panel -->
+    <div style="padding: 25px; font-size: 1.2rem; font-weight: 700; letter-spacing: 1px; border-bottom: 1px solid rgba(255,255,255,0.08); color: #fff;">
+        BÚHO <span style="color: #db2777;">ADMIN</span>
+    </div>
+
+    <!-- Menú de Enlaces a los Módulos -->
+    <ul style="list-style: none; padding: 20px 15px; display: flex; flex-direction: column; gap: 10px;">
+        <li>
+            <a href="/admin/dashboard" style="color: #9ca3af; text-decoration: none; display: flex; align-items: center; gap: 12px; padding: 12px 15px; border-radius: 10px; transition: 0.3s;">
+                <i class="fa-solid fa-chart-pie" style="width: 20px; text-align: center;"></i> Dashboard
+            </a>
+        </li>
+        <li>
+            <a href="/admin/citas" style="color: #9ca3af; text-decoration: none; display: flex; align-items: center; gap: 12px; padding: 12px 15px; border-radius: 10px; transition: 0.3s;">
+                <i class="fa-solid fa-calendar-days" style="width: 20px; text-align: center;"></i> Gestión de Citas
+            </a>
+        </li>
+        <li>
+            <a href="/admin/servicios" style="color: #9ca3af; text-decoration: none; display: flex; align-items: center; gap: 12px; padding: 12px 15px; border-radius: 10px; transition: 0.3s;">
+                <i class="fa-solid fa-scissors" style="width: 20px; text-align: center;"></i> Servicios
+            </a>
+        </li>
+        <li>
+            <a href="/admin/reportes" style="color: #9ca3af; text-decoration: none; display: flex; align-items: center; gap: 12px; padding: 12px 15px; border-radius: 10px; transition: 0.3s;">
+                <i class="fa-solid fa-file-lines" style="width: 20px; text-align: center;"></i> Auditoría / Reportes
+            </a>
+        </li>
+    </ul>
+
+    <!-- Botón de Cerrar Sesión en la parte inferior -->
+    <div style="margin-top: auto; padding: 20px 15px; border-top: 1px solid rgba(255,255,255,0.08);">
+        <form action="/logout" method="POST">
+            <button type="submit" style="width: 100%; background: rgba(219,39,119,0.1); border: 1px solid #db2777; color: #f472b6; padding: 10px; border-radius: 10px; cursor: pointer; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                <i class="fa-solid fa-right-from-bracket"></i> Salir
+            </button>
+        </form>
+    </div>
+</aside>

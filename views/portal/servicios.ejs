@@ -1,0 +1,129 @@
+<div class="p-6 space-y-6 max-w-[100%] overflow-hidden bg-slate-950 min-h-screen text-slate-100">
+    <!-- Encabezado del Módulo -->
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-slate-900/80 backdrop-blur-md border border-slate-800/80 rounded-2xl p-6 shadow-2xl">
+        <div class="flex items-center gap-3">
+            <div class="w-12 h-12 rounded-xl bg-blue-600/10 border border-blue-500/20 flex items-center justify-center text-blue-400 text-xl shadow-inner">
+                <i class="fa-solid fa-scissors"></i>
+            </div>
+            <div>
+                <h2 class="text-xl font-bold text-white tracking-tight">Panel de Servicios</h2>
+                <p class="text-xs text-slate-400 mt-0.5">Administración y control del catálogo oficial de la barbería.</p>
+            </div>
+        </div>
+        <button type="button" class="bg-slate-900 hover:bg-slate-800 border border-slate-700/60 text-slate-200 px-4 py-2.5 rounded-xl text-sm transition-all duration-200 flex items-center gap-2 shadow-md cursor-pointer hover:border-slate-600 active:scale-95" onclick="cargarServiciosDesdeBD()">
+            <i class="fa-solid fa-rotate text-blue-400"></i> Recargar Tabla
+        </button>
+    </div>
+
+    <!-- Formulario para Registrar/Editar Servicio -->
+    <div class="bg-slate-900/80 backdrop-blur-md border border-slate-800/80 rounded-2xl p-6 shadow-2xl space-y-5">
+        <div class="flex items-center justify-between border-b border-slate-800/80 pb-3">
+            <h3 class="text-sm font-semibold text-blue-400 uppercase tracking-wider flex items-center gap-2">
+                <i class="fa-solid fa-circle-plus"></i> Gestionar Servicio
+            </h3>
+        </div>
+        
+        <form id="formNuevoServicio" class="space-y-4">
+            <input type="hidden" id="servicioId"> <!-- Campo oculto para detectar edición -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                <div>
+                    <label for="nuevoNombre" class="block text-xs font-medium text-slate-300 mb-1.5">Nombre del Servicio *</label>
+                    <input type="text" class="w-full bg-slate-950/80 border border-slate-800 text-slate-100 px-3.5 py-2.5 rounded-xl text-sm focus:outline-none focus:border-blue-500 transition-all" id="nuevoNombre" required placeholder="Ej: Tratamiento Capilar">
+                </div>
+                <div>
+                    <label for="nuevoPrecio" class="block text-xs font-medium text-slate-300 mb-1.5">Precio ($) *</label>
+                    <input type="number" step="0.01" class="w-full bg-slate-950/80 border border-slate-800 text-slate-100 px-3.5 py-2.5 rounded-xl text-sm focus:outline-none focus:border-blue-500 transition-all" id="nuevoPrecio" required placeholder="Ej: 5000">
+                </div>
+                <div>
+                    <label for="nuevaDuracion" class="block text-xs font-medium text-slate-300 mb-1.5">Duración (días) *</label>
+                    <input type="number" class="w-full bg-slate-950/80 border border-slate-800 text-slate-100 px-3.5 py-2.5 rounded-xl text-sm focus:outline-none focus:border-blue-500 transition-all" id="nuevaDuracion" required placeholder="Ej: 3">
+                </div>
+            </div>
+
+            <div class="space-y-2">
+               <label for="imagenServicio" class="block text-xs font-semibold uppercase tracking-wider text-slate-300">Imagen del Servicio</label>
+               <input type="file" id="imagenServicio" name="imagen" accept="image/*" class="w-full bg-slate-950/60 border border-slate-800 rounded-xl px-4 py-3 text-white text-sm">
+            </div>
+
+            <div class="flex justify-end gap-3 mt-4">
+               <button type="submit" class="bg-blue-600 hover:bg-blue-500 text-white font-medium px-6 py-2.5 rounded-xl text-sm">Guardar Servicio</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Tabla de Servicios -->
+    <div class="bg-slate-900/80 backdrop-blur-md border border-slate-800/80 rounded-2xl shadow-2xl overflow-hidden">
+        <div class="px-6 py-4 border-b border-slate-800/80 flex justify-between items-center bg-slate-900/40">
+            <h3 class="font-bold text-slate-200 text-base">Catálogo Actual</h3>
+            <span class="bg-blue-500/10 text-blue-400 border border-blue-500/20 px-3 py-1 rounded-full text-xs font-semibold" id="total-servicios">0 servicios</span>
+        </div>
+
+        <div class="overflow-x-auto w-full">
+            <table class="w-full text-left">
+                <thead>
+                    <tr class="bg-slate-950/80 border-b border-slate-800/80 text-xs text-slate-400 uppercase">
+                        <th class="py-4 px-6">ID</th>
+                        <th class="py-4 px-6">Nombre</th>
+                        <th class="py-4 px-6">Precio</th>
+                        <th class="py-4 px-6">Duración</th>
+                        <th class="py-4 px-6 text-right">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="tabla-servicios" class="divide-y divide-slate-800/60 text-sm text-slate-300">
+                    <tr><td colspan="5" class="text-center py-8">Cargando...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", cargarServiciosDesdeBD);
+
+    async function cargarServiciosDesdeBD() {
+        try {
+            const response = await fetch('/api/servicios');
+            const servicios = await response.json();
+            const tbody = document.getElementById('tabla-servicios');
+            tbody.innerHTML = '';
+            
+            servicios.forEach(serv => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="py-4 px-6 font-mono text-slate-400">#${serv.id}</td>
+                    <td class="py-4 px-6 font-medium">${serv.nombre}</td>
+                    <td class="py-4 px-6 text-emerald-400">$${Number(serv.precio).toLocaleString()}</td>
+                    <td class="py-4 px-6">${serv.duracion} días</td>
+                    <td class="py-4 px-6 text-right space-x-2">
+                        <button onclick="prepararEditar(${serv.id}, '${serv.nombre}', ${serv.precio}, ${serv.duracion})" class="text-amber-400 p-2"><i class="fa-solid fa-pen"></i></button>
+                        <button onclick="eliminarServicio(${serv.id})" class="text-rose-400 p-2"><i class="fa-solid fa-trash"></i></button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+            document.getElementById('total-servicios').innerText = `${servicios.length} servicios`;
+        } catch (e) { console.error(e); }
+    }
+
+    function prepararEditar(id, nombre, precio, duracion) {
+        document.getElementById('servicioId').value = id;
+        document.getElementById('nuevoNombre').value = nombre;
+        document.getElementById('nuevoPrecio').value = precio;
+        document.getElementById('nuevaDuracion').value = duracion;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    document.getElementById('formNuevoServicio').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const id = document.getElementById('servicioId').value;
+        const formData = new FormData(e.target);
+        
+        const url = id ? `/admin/servicios/${id}` : '/admin/servicios';
+        const method = id ? 'PUT' : 'POST';
+
+        await fetch(url, { method, body: formData });
+        e.target.reset();
+        document.getElementById('servicioId').value = '';
+        cargarServiciosDesdeBD();
+    });
+</script>

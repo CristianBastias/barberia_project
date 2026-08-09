@@ -1,0 +1,96 @@
+<div class="p-6 max-w-7xl mx-auto space-y-6">
+    <!-- Encabezado del Módulo -->
+    <div class="flex items-center gap-4 mb-8">
+        <div class="p-3 bg-gradient-to-br from-emerald-500/20 to-emerald-300/10 border border-emerald-500/30 rounded-2xl shadow-[0_0_15px_rgba(52,211,153,0.2)] text-emerald-400">
+           <i class="fa-solid fa-shirt text-xl"></i>
+        </div>
+        <div>
+          <h1 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">Gestión de Indumentaria</h1>
+          <p class="text-slate-400 text-sm mt-1">Control de inventario, stock y pedidos de productos.</p>
+        </div>
+    </div>
+
+    <!-- CONTENIDOS: FORMULARIO Y TABLA -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- CARD FORMULARIO -->
+        <div class="lg:col-span-4">
+            <div class="bg-slate-900/80 border border-slate-800/80 rounded-2xl p-5 shadow-xl transition-all duration-200">
+                <div class="mb-4">
+                    <h2 id="formTituloProducto" class="text-sm font-semibold text-blue-400 uppercase tracking-wider flex items-center gap-2">
+                        <i class="fa-solid fa-circle-plus"></i> Registrar Nueva Prenda
+                    </h2>
+                </div>
+
+                <form id="formIndumentaria" class="space-y-4">
+                    <input type="hidden" id="productoIdEdit" value="">
+
+                    <div>
+                        <label class="block text-xs font-medium text-slate-400 mb-1">Nombre de la Prenda *</label>
+                        <input type="text" id="nombreProducto" required placeholder="Ej: Remera Búho Classic Black"
+                            class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-amber-500/50 transition-all">
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-medium text-slate-400 mb-1">Precio ($) *</label>
+                            <input type="number" id="precioProducto" step="0.01" min="0" required placeholder="15000"
+                                class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-amber-500/50 transition-all">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-slate-400 mb-1">Stock Disponible *</label>
+                            <input type="number" id="stockProducto" min="0" required placeholder="10"
+                                class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-amber-500/50 transition-all">
+                        </div>
+                    </div>
+
+                    
+                    <div>
+                       <label class="block text-xs font-medium text-slate-400 mb-1">Imagen de la Prenda *</label>
+                       <input type="file" id="imagenProducto" accept="image/*"
+                        class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-sm text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-500 transition-all cursor-pointer">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-medium text-slate-400 mb-1">Descripción</label>
+                        <textarea id="descripcionProducto" rows="3" placeholder="Detalles de tela, talles disponibles, corte..."
+                            class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-amber-500/50 transition-all resize-none"></textarea>
+                    </div>
+
+                    <div class="flex items-center gap-2 pt-2">
+                        <button type="submit" id="btnSubmitProducto" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-medium px-4 py-2.5 rounded-xl text-sm transition-all shadow-md cursor-pointer">
+                            Guardar Prenda
+                        </button>
+                        <button type="button" id="btnCancelarEdicionProducto" onclick="resetearFormularioProducto()" class="hidden bg-slate-800 hover:bg-slate-700 text-slate-300 font-medium px-4 py-2.5 rounded-xl text-sm transition-all cursor-pointer">
+                            Cancelar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- TABLA DE PRODUCTOS -->
+        <div class="lg:col-span-8">
+            <div class="bg-slate-900/80 border border-slate-800/80 rounded-2xl overflow-hidden shadow-xl">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="border-b border-slate-800 bg-slate-950/60 text-slate-400 text-xs font-semibold uppercase tracking-wider">
+                                <th class="py-3.5 px-4">Prenda</th>
+                                <th class="py-3.5 px-4">Precio</th>
+                                <th class="py-3.5 px-4">Stock</th>
+                                <th class="py-3.5 px-4">Estado</th>
+                                <th class="py-3.5 px-4 text-right">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tablaIndumentaria">
+                            <!-- Datos dinámicos cargados por JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/js/indumentaria.js"></script>

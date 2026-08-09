@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Usuarios | Barbería Búho</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Outfit', sans-serif; background-color: #030712; color: #f3f4f6; }
+        .glass-panel { background: rgba(17, 24, 39, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.06); }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col selection:bg-blue-500 selection:text-white">
+
+    <!-- HEADER -->
+    <header class="glass-panel border-b border-slate-800/80 h-16 px-6 flex justify-between items-center fixed top-0 left-0 right-0 z-50">
+        <div class="flex items-center space-x-3">
+            <span class="text-xl font-extrabold tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-red-500">BÚHO ADMIN</span>
+        </div>
+        <div class="flex items-center space-x-4">
+            <div class="hidden sm:flex flex-col text-right">
+                <p id="nombreUsuarioLabel" class="text-xs font-bold text-white"><%= user ? user.nombre : 'Administrador' %></p>
+                <span id="rolUsuarioBadge" class="text-[9px] uppercase px-1.5 py-0.2 rounded-full font-mono font-bold bg-blue-500/20 text-blue-400"><%= user ? user.rol : 'admin' %></span>
+            </div>
+            <button onclick="cerrarSesion()" class="p-2 bg-slate-800/80 hover:bg-red-500/20 text-slate-300 hover:text-red-400 rounded-xl text-xs font-semibold border border-slate-700 transition-all cursor-pointer">🚪 Salir</button>
+        </div>
+    </header>
+
+    <div class="flex pt-16 flex-1">
+        <!-- SIDEBAR -->
+        <aside class="w-64 glass-panel border-r border-slate-800/80 fixed top-16 bottom-0 left-0 hidden md:flex flex-col justify-between p-4 z-40">
+            <nav class="space-y-1.5">
+                <a href="/admin" class="flex items-center space-x-3 px-4 py-3 text-slate-400 hover:text-white hover:bg-slate-800/50 rounded-xl font-medium text-sm transition-all"><span>📊</span><span>Dashboard</span></a>
+                <a href="/admin/servicios" class="flex items-center space-x-3 px-4 py-3 text-slate-400 hover:text-white hover:bg-slate-800/50 rounded-xl font-medium text-sm transition-all"><span>✂️</span><span>Servicios</span></a>
+                <a href="/admin/barberos" class="flex items-center space-x-3 px-4 py-3 text-slate-400 hover:text-white hover:bg-slate-800/50 rounded-xl font-medium text-sm transition-all"><span>👥</span><span>Barberos</span></a>
+                <a href="/admin/citas" class="flex items-center space-x-3 px-4 py-3 text-slate-400 hover:text-white hover:bg-slate-800/50 rounded-xl font-medium text-sm transition-all"><span>📅</span><span>Citas / Turnos</span></a>
+                <a href="/admin/usuarios" class="flex items-center space-x-3 px-4 py-3 bg-blue-600/20 border border-blue-500/40 text-blue-400 rounded-xl font-semibold text-sm"><span>🛡️</span><span>Usuarios / Staff</span></a>
+            </nav>
+        </aside>
+
+        <!-- CONTENIDO PRINCIPAL -->
+        <main class="flex-1 md:ml-64 p-6 md:p-8 space-y-6">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h2 class="text-2xl font-black text-white tracking-wide">Gestión de Usuarios y Roles</h2>
+                    <p class="text-slate-400 text-xs mt-1">Administra los permisos de acceso y cuentas del sistema.</p>
+                </div>
+            </div>
+
+            <!-- TABLA DE USUARIOS -->
+            <div class="glass-panel rounded-3xl overflow-hidden border border-slate-800">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="border-b border-slate-800 text-[11px] font-bold uppercase tracking-wider text-slate-400 bg-slate-900/50">
+                            <th class="p-4">Nombre</th>
+                            <th class="p-4">Usuario (Login)</th>
+                            <th class="p-4">Rol Asignado</th>
+                            <th class="p-4 text-center">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tablaUsuariosBody" class="divide-y divide-slate-800/60 text-sm">
+                        <!-- Llenado dinámicamente por JS o EJS -->
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <!-- MODAL DE EDICIÓN -->
+    <div id="modalEditarUsuario" class="fixed inset-0 bg-black/70 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+        <div class="glass-panel w-full max-w-md p-6 rounded-3xl border border-slate-700 space-y-4 shadow-2xl">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+                <h3 class="text-lg font-bold text-white">Editar Perfil de Usuario</h3>
+                <button onclick="cerrarModal()" class="text-slate-400 hover:text-white">✕</button>
+            </div>
+            <form id="formEditarUsuario" class="space-y-4">
+                <input type="hidden" id="editId">
+                <div>
+                    <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Nombre Completo</label>
+                    <input type="text" id="editNombre" required class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-white text-sm focus:border-blue-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Usuario (Login)</label>
+                    <input type="text" id="editUsuario" required class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-white text-sm focus:border-blue-500 focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Rol en el Sistema</label>
+                    <select id="editRol" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-white text-sm focus:border-blue-500 focus:outline-none">
+                        <option value="admin">Administrador (Control Total)</option>
+                        <option value="empleado">Empleado (Restringido)</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold uppercase text-slate-400 mb-1">Nueva Contraseña (Opcional)</label>
+                    <input type="password" id="editPassword" placeholder="Dejar en blanco para mantener la actual" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-4 py-2.5 text-white text-sm focus:border-blue-500 focus:outline-none">
+                </div>
+                <div class="flex justify-end space-x-3 pt-2">
+                    <button type="button" onclick="cerrarModal()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-xs font-semibold">Cancelar</button>
+                    <button type="submit" class="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-semibold shadow-lg shadow-blue-600/30">Guardar Cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="/js/usuarios.js"></script>
+</body>
+</html>

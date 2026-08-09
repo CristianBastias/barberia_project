@@ -1,0 +1,394 @@
+<!-- HERO SECTION CON IMAGEN DE FONDO PANORAMICA -->
+<header id="inicio" class="relative min-h-[85vh] md:min-h-[92vh] flex items-center justify-center overflow-hidden px-4 sm:px-8 py-24">
+    <!-- IMAGEN DE FONDO PANORÁMICA Y CON MOVIMIENTO SUAVE -->
+    <div class="absolute inset-0 z-0 overflow-hidden flex items-center justify-center bg-slate-950">
+        <img src="/img/buho-clasico.jpg" alt="Fondo Búho Barber Studio" class="w-full h-full object-cover md:object-center opacity-85 animate-kenburns">
+    </div>
+
+    <!-- CAPA OSCURA CON EFECTO BLUR SUTIL PARA DAR PROFUNDIDAD -->
+    <div class="absolute inset-0 bg-gradient-to-b from-[#0b0f19]/90 via-[#0b0f19]/70 to-[#0b0f19]/90 backdrop-blur-[2px] z-10"></div>
+
+    <!-- CONTENIDO -->
+    <div class="relative z-20 max-w-4xl text-center flex flex-col items-center gap-6">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs sm:text-sm font-semibold">
+            <i class="fa-solid fa-fire"></i> La experiencia urbana definitiva
+        </div>
+        <h1 class="text-3xl sm:text-5xl md:text-6xl font-extrabold text-white tracking-tight leading-tight">
+            Precisión, Estilo & <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-400 to-pink-500">Vibra Exclusiva</span>
+        </h1>
+        <p class="text-slate-300 text-sm sm:text-base max-w-2xl leading-relaxed">
+            Elevamos el concepto de la barbería clásica a un nivel superior con cortes modernos, rituales de barba y cultura streetwear.
+        </p>
+        <a href="/reservar" class="px-6 py-3.5 bg-gradient-to-r from-blue-600 to-pink-600 hover:from-blue-500 hover:to-pink-500 text-white font-bold text-sm rounded-xl shadow-[0_4px_20px_rgba(236,72,153,0.4)] transition-all flex items-center gap-2.5">
+            <i class="fa-solid fa-bolt"></i> Reserva tu Turno Ahora
+        </a>
+    </div>
+</header>
+
+<!-- ESTILO CSS PARA EL MOVIMIENTO SUAVE PANORÁMICO -->
+<style>
+@keyframes kenburns {
+    0% {
+        transform: scale(1.02);
+    }
+    50% {
+        transform: scale(1.08);
+    }
+    100% {
+        transform: scale(1.02);
+    }
+}
+
+.animate-kenburns {
+    animation: kenburns 25s ease-in-out infinite;
+}
+</style>
+
+<!-- SECCIÓN TENDENCIAS - CARRUSEL MODERNO -->
+<section id="tendencias" class="py-20 px-4 sm:px-8 max-w-7xl mx-auto overflow-hidden">
+    <div class="text-center max-w-2xl mx-auto mb-12">
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-2">
+            Tendencias <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-pink-500">2026</span>
+        </h2>
+        <p class="text-slate-400 text-sm sm:text-base">Descubre los estilos más pedidos por la nueva generación</p>
+    </div>
+    
+    <!-- Contenedor Desplazable del Carrusel -->
+    <div id="carruselTendencias" class="flex gap-6 overflow-x-auto snap-x snap-mandatory scrollbar-none pb-4 focus:outline-none" style="scroll-behavior: smooth; -ms-overflow-style: none; scrollbar-width: none;">
+        
+        <!-- TARJETA 01 -->
+        <div class="min-w-[300px] sm:min-w-[380px] md:min-w-[400px] flex-shrink-0 snap-start relative group overflow-hidden rounded-2xl border border-slate-800 shadow-xl min-h-[380px] flex flex-col justify-end p-6">
+            <div class="absolute inset-0 bg-cover bg-center group-hover:scale-110 transition-transform duration-700 ease-out" style="background-image: url('/img/tendencia1.jpg');"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-[#0b0f19] via-[#0b0f19]/80 to-transparent"></div>
+            
+            <div class="relative z-10">
+                <span class="text-xs font-bold text-blue-400 uppercase tracking-widest">Estilo 01</span>
+                <h3 class="text-xl font-bold text-white mt-1 mb-2">High Fade & Textured Crop</h3>
+                <p class="text-slate-300 text-sm leading-relaxed">Definición impecable en los laterales con movimiento superior texturizado.</p>
+            </div>
+        </div>
+
+        <!-- TARJETA 02 -->
+        <div class="min-w-[300px] sm:min-w-[380px] md:min-w-[400px] flex-shrink-0 snap-start relative group overflow-hidden rounded-2xl border border-slate-800 shadow-xl min-h-[380px] flex flex-col justify-end p-6">
+            <div class="absolute inset-0 bg-cover bg-center group-hover:scale-110 transition-transform duration-700 ease-out" style="background-image: url('/img/servicio2.jpg');"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-[#0b0f19] via-[#0b0f19]/80 to-transparent"></div>
+            
+            <div class="relative z-10">
+                <span class="text-xs font-bold text-blue-400 uppercase tracking-widest">Estilo 02</span>
+                <h3 class="text-xl font-bold text-white mt-1 mb-2">Barba Definida con Navaja</h3>
+                <p class="text-slate-300 text-sm leading-relaxed">Diseño de contornos perfectos asistidos con aceites esenciales y toallas calientes.</p>
+            </div>
+        </div>
+
+        <!-- TARJETA 03 -->
+        <div class="min-w-[300px] sm:min-w-[380px] md:min-w-[400px] flex-shrink-0 snap-start relative group overflow-hidden rounded-2xl border border-slate-800 shadow-xl min-h-[380px] flex flex-col justify-end p-6">
+            <div class="absolute inset-0 bg-cover bg-center group-hover:scale-110 transition-transform duration-700 ease-out" style="background-image: url('/img/servicio3.jpg');"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-[#0b0f19] via-[#0b0f19]/80 to-transparent"></div>
+            
+            <div class="relative z-10">
+                <span class="text-xs font-bold text-blue-400 uppercase tracking-widest">Estilo 03</span>
+                <h3 class="text-xl font-bold text-white mt-1 mb-2">Mullet & Flow Moderno</h3>
+                <p class="text-slate-300 text-sm leading-relaxed">El regreso del estilo audaz con acabados profesionales y degradados limpios.</p>
+            </div>
+        </div>
+
+        <!-- TARJETA 04 -->
+        <div class="min-w-[300px] sm:min-w-[380px] md:min-w-[400px] flex-shrink-0 snap-start relative group overflow-hidden rounded-2xl border border-slate-800 shadow-xl min-h-[380px] flex flex-col justify-end p-6">
+            <div class="absolute inset-0 bg-cover bg-center group-hover:scale-110 transition-transform duration-700 ease-out" style="background-image: url('/img/servicio1.jpg');"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-[#0b0f19] via-[#0b0f19]/80 to-transparent"></div>
+            
+            <div class="relative z-10">
+                <span class="text-xs font-bold text-blue-400 uppercase tracking-widest">Estilo 04</span>
+                <h3 class="text-xl font-bold text-white mt-1 mb-2">Classic Pompadour</h3>
+                <p class="text-slate-300 text-sm leading-relaxed">Elegancia atemporal con volumen controlado y acabado en brillo medio.</p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- BOTONES DE CONTROL UBICADOS POR DEBAJO DEL CARRUSEL -->
+    <div class="flex items-center justify-center gap-4 mt-8">
+        <button onclick="scrollCarrusel('left')" class="w-12 h-12 rounded-xl bg-slate-900 border border-slate-800 hover:border-blue-500/50 hover:bg-slate-800 text-white flex items-center justify-center transition-all shadow-md active:scale-95 cursor-pointer">
+            <i class="fa-solid fa-arrow-left"></i>
+        </button>
+        <button onclick="scrollCarrusel('right')" class="w-12 h-12 rounded-xl bg-slate-900 border border-slate-800 hover:border-blue-500/50 hover:bg-slate-800 text-white flex items-center justify-center transition-all shadow-md active:scale-95 cursor-pointer">
+            <i class="fa-solid fa-arrow-right"></i>
+        </button>
+    </div>
+</section>
+
+<!-- SCRIPT DE CONTROL PARA LAS FLECHAS -->
+<script>
+    function scrollCarrusel(direction) {
+        const container = document.getElementById('carruselTendencias');
+        const scrollAmount = 420; 
+        if (direction === 'left') {
+            container.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+        } else {
+            container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+        }
+    }
+</script>
+
+<!-- SERVICIOS -->
+<section id="servicios" class="py-20 px-4 sm:px-8 max-w-7xl mx-auto bg-slate-950/40 rounded-3xl my-10 border border-slate-900">
+    <div class="text-center max-w-2xl mx-auto mb-16">
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-3">
+            Nuestros <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-pink-500">Servicios</span>
+        </h2>
+        <p class="text-slate-400 text-sm sm:text-base">Tecnología, precisión y cuidado personal de primer nivel</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <% if (servicios && servicios.length > 0) { %>
+            <% servicios.slice(0, 3).forEach(servicio => { %>
+                <!-- Tarjeta Contenedor con group y overflow-hidden -->
+                <div class="relative overflow-hidden bg-slate-900 border border-slate-800 rounded-2xl p-8 flex flex-col items-start gap-4 shadow-xl hover:border-blue-500/50 transition-all group">
+                    
+                    <!-- Capa de Fondo con la Imagen y el efecto Zoom (scale-110 al hacer hover) -->
+                    <div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 ease-out group-hover:scale-110 z-0" style="background-image: linear-gradient(to bottom, rgba(15, 23, 42, 0.90), rgba(15, 23, 42, 0.95)), url('<%= servicio.imagen ? `/uploads/${servicio.imagen}` : `/img/servicio1.jpg` %>');"></div>
+
+                    <!-- Contenido de la Tarjeta (aseguramos z-10 para que esté por encima del fondo) -->
+                    <div class="relative z-10 w-14 h-14 rounded-2xl bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-400 text-xl group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-scissors"></i>
+                    </div>
+                    
+                    <h3 class="relative z-10 text-xl font-bold text-white"><%= servicio.nombre %></h3>
+                    
+                    <p class="relative z-10 text-slate-400 text-sm leading-relaxed">
+                        Servicio profesional personalizado. Duración estimada: <%= servicio.duracion %> días.
+                    </p>
+                    
+                    <div class="relative z-10 mt-auto pt-4 border-t border-slate-800/80 w-full font-extrabold text-pink-500 text-lg">
+                        Desde $<%= Number(servicio.precio).toLocaleString() %>
+                    </div>
+                </div>
+            <% }) %>
+        <% } else { %>
+            <p class="text-slate-400 text-center col-span-3">No hay servicios disponibles en este momento.</p>
+        <% } %>
+    </div>
+
+    <!-- Frase elegante y Botón de redirección al catálogo -->
+    <div class="mt-16 text-center space-y-4">
+        <p class="text-slate-400 italic text-sm sm:text-base">
+            "Elevamos tu estilo con cada detalle; descubre nuestra experiencia completa."
+        </p>
+        <div>
+            <a href="/catalogo" class="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-pink-600 hover:from-blue-500 hover:to-pink-500 text-white font-semibold px-8 py-3.5 rounded-2xl shadow-lg hover:shadow-blue-500/20 transition-all duration-300 transform hover:-translate-y-0.5">
+                <i class="fa-solid fa-list-check"></i> Ver Catálogo Completo
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- BARBEROS / STAFF -->
+<section id="barberos" class="py-20 px-4 sm:px-8 max-w-7xl mx-auto">
+    <div class="text-center max-w-2xl mx-auto mb-16">
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-3">
+            Nuestro <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-pink-500">Staff</span>
+        </h2>
+        <p class="text-slate-400 text-sm sm:text-base">Expertos apasionados por el arte de la barbería</p>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="bg-slate-900/60 border border-slate-800 rounded-2xl overflow-hidden shadow-xl group">
+            <div class="h-72 bg-cover bg-center group-hover:scale-105 transition-transform duration-500" style="background-image: url('https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80');"></div>
+            <div class="p-6 text-center">
+                <h3 class="text-xl font-bold text-white mb-1">Axel "Master Fade"</h3>
+                <span class="text-xs uppercase tracking-widest text-blue-400 font-semibold">Especialista en Fades</span>
+            </div>
+        </div>
+        <div class="bg-slate-900/60 border border-slate-800 rounded-2xl overflow-hidden shadow-xl group">
+            <div class="h-72 bg-cover bg-center group-hover:scale-105 transition-transform duration-500" style="background-image: url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80');"></div>
+            <div class="p-6 text-center">
+                <h3 class="text-xl font-bold text-white mb-1">Lucas "Blade"</h3>
+                <span class="text-xs uppercase tracking-widest text-blue-400 font-semibold">Barbas & Estilo Clásico</span>
+            </div>
+        </div>
+        <div class="bg-slate-900/60 border border-slate-800 rounded-2xl overflow-hidden shadow-xl group">
+            <div class="h-72 bg-cover bg-center group-hover:scale-105 transition-transform duration-500" style="background-image: url('https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=600&q=80');"></div>
+            <div class="p-6 text-center">
+                <h3 class="text-xl font-bold text-white mb-1">Franco "Stylist"</h3>
+                <span class="text-xs uppercase tracking-widest text-blue-400 font-semibold">Colorimetría & Tendencias</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ANEXO INDUMENTARIA & MERCH -->
+<section id="indumentaria" class="py-20 px-4 sm:px-8 max-w-7xl mx-auto">
+    <div class="bg-gradient-to-r from-blue-950/40 via-slate-900 to-pink-950/30 border border-slate-800 rounded-3xl p-8 sm:p-12 flex flex-col md:flex-row items-center justify-between gap-8 shadow-2xl">
+        <div class="max-w-xl">
+            <h3 class="text-2xl sm:text-3xl font-extrabold text-white mb-3">BÚHO <span class="text-pink-500">Apparel & Merch</span></h3>
+            <p class="text-slate-300 text-sm sm:text-base leading-relaxed mb-6">No solo cortamos el pelo, vivimos la cultura urbana. Explora nuestra línea exclusiva de remeras oversize, gorras snapback y accesorios de cuidado personal.</p>
+            <a href="/indumentaria" class="inline-flex items-center gap-2.5 px-6 py-3 bg-gradient-to-r from-blue-600 to-pink-600 hover:from-blue-500 hover:to-pink-500 text-white font-bold text-xs sm:text-sm rounded-xl shadow-lg transition-all">
+                <i class="fa-solid fa-bolt"></i> Consultar Catálogo
+            </a>
+        </div>
+        <div class="flex items-center gap-4">
+            <div class="w-32 h-40 sm:w-40 sm:h-48 rounded-2xl bg-cover bg-center shadow-lg border border-slate-700/50 transform -rotate-3 hover:rotate-0 transition-transform" style="background-image: url('https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=400&q=80');"></div>
+            <div class="w-32 h-40 sm:w-40 sm:h-48 rounded-2xl bg-cover bg-center shadow-lg border border-slate-700/50 transform rotate-3 hover:rotate-0 transition-transform mt-6" style="background-image: url('https://images.unsplash.com/photo-1588850561407-ed78c282e89b?auto=format&fit=crop&w=400&q=80');"></div>
+        </div>
+    </div>
+</section>
+
+<!-- SECCIÓN UNIFICADA: ¿QUIÉNES SOMOS Y CONTACTO? -->
+<section id="quienes-somos" class="py-20 px-4 sm:px-8 max-w-7xl mx-auto space-y-16">
+    
+    <!-- Encabezado Principal -->
+    <div class="text-center max-w-2xl mx-auto">
+        <span class="text-xs font-bold text-pink-500 uppercase tracking-widest block mb-2">Nuestra Esencia</span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-3">
+            ¿Quiénes <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-pink-500">Somos?</span>
+        </h2>
+        <p class="text-slate-400 text-sm sm:text-base leading-relaxed">
+            Más que un corte, una cultura. Fusionamos la precisión de la barbería clásica con la vanguardia de la estética urbana moderna para ofrecerte una experiencia única en cada visita.
+        </p>
+    </div>
+    
+    <!-- Tarjetas de Identidad / Esencia (Grid de 3 Columnas) -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        
+        <!-- TARJETA 01: PASIÓN -->
+        <div class="relative group overflow-hidden rounded-2xl border border-slate-800 shadow-xl min-h-[380px] flex flex-col justify-end p-6 bg-cover bg-center" style="background-image: url('/img/local1.jpg');">
+            <div class="absolute inset-0 bg-gradient-to-t from-[#0b0f19] via-[#0b0f19]/80 to-transparent"></div>
+            <div class="relative z-10">
+                <span class="text-xs font-bold text-blue-400 uppercase tracking-widest">Maestría & Arte</span>
+                <h3 class="text-xl font-bold text-white mt-1 mb-2">Precisión en Cada Detalle</h3>
+                <p class="text-slate-300 text-sm leading-relaxed">Perfeccionamos cada técnica para transformar tu estilo personal en una declaración de identidad.</p>
+            </div>
+        </div>
+
+        <!-- TARJETA 02: EXPERIENCIA -->
+        <div class="relative group overflow-hidden rounded-2xl border border-slate-800 shadow-xl min-h-[380px] flex flex-col justify-end p-6 bg-cover bg-center" style="background-image: url('/img/local2.jpg');">
+            <div class="absolute inset-0 bg-gradient-to-t from-[#0b0f19] via-[#0b0f19]/80 to-transparent"></div>
+            <div class="relative z-10">
+                <span class="text-xs font-bold text-blue-400 uppercase tracking-widest">Vibra Exclusiva</span>
+                <h3 class="text-xl font-bold text-white mt-1 mb-2">Un Espacio Diseñado para Vos</h3>
+                <p class="text-slate-300 text-sm leading-relaxed">Un ambiente único donde la buena música, el diseño y el cuidado personal se encuentran.</p>
+            </div>
+        </div>
+
+        <!-- TARJETA 03: COMUNIDAD -->
+        <div class="relative group overflow-hidden rounded-2xl border border-slate-800 shadow-xl min-h-[380px] flex flex-col justify-end p-6 bg-cover bg-center" style="background-image: url('/img/local3.jpg');">
+            <div class="absolute inset-0 bg-gradient-to-t from-[#0b0f19] via-[#0b0f19]/80 to-transparent"></div>
+            <div class="relative z-10">
+                <span class="text-xs font-bold text-blue-400 uppercase tracking-widest">Cultura Urbana</span>
+                <h3 class="text-xl font-bold text-white mt-1 mb-2">Pasión por lo que Hacemos</h3>
+                <p class="text-slate-300 text-sm leading-relaxed">Construimos una comunidad fiel que comparte nuestra visión de la elegancia contemporánea.</p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Bloque de Interacción: Formulario, Mapa y Canales de Contacto -->
+    <div id="contacto-seccion" class="bg-slate-950/60 rounded-3xl p-6 sm:p-10 border border-slate-900 shadow-2xl">
+        
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+            
+            <!-- Columna Izquierda: Formulario de Mail con Frase Motivadora -->
+            <div class="bg-slate-900/90 border border-slate-800/80 rounded-2xl p-8 shadow-xl space-y-6">
+                <div>
+                    <span class="text-blue-400 text-xs font-semibold tracking-wider uppercase bg-blue-500/10 px-3 py-1 rounded-full border border-blue-500/20">Tu opinión importa</span>
+                    <h3 class="text-2xl font-bold text-white mt-3">Déjanos tu consulta o comentario</h3>
+                    <p class="text-slate-400 text-sm mt-1 italic">"Tu comentario nos hace ser cada día mejores."</p>
+                </div>
+
+             <form id="formContactoPublico" class="space-y-4">
+                <div>
+                    <label for="nombreContacto" class="block text-xs font-medium text-slate-300 mb-1.5">Tu Nombre *</label>
+                    <input type="text" id="nombreContacto" required class="w-full bg-slate-950/80 border  border-slate-800   text-slate-100 px-4 py-3 rounded-xl text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all placeholder:text-slate-600" placeholder="Ej: Carlos Gómez">
+                 </div>
+
+                <div>
+                    <label for="emailContacto" class="block text-xs font-medium text-slate-300 mb-1.5">Correo Electrónico*</label>
+                    <input type="email" id="emailContacto" required class="w-full bg-slate-950/80 border  border-slate-800 text-slate-100 px-4 py-3 rounded-xl text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all placeholder:text-slate-600" placeholder="tu@correo.com">
+                </div>
+
+                <div>
+                   <label for="mensajeContacto" class="block text-xs font-medium text-slate-300 mb-1.5">Mensaje o Sugerencia *</label>
+                   <textarea id="mensajeContacto" rows="4" required class="w-full bg-slate-950/80 border border-slate-800 text-slate-100 px-4 py-3 rounded-xl text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all placeholder:text-slate-600" placeholder="¿Cómo fue tu experiencia o qué consulta tienes?"></textarea>
+                </div>
+
+                  <button type="submit" id="btnEnviarPublico" class="w-full bg-gradient-to-r from-blue-600 to-pink-600 hover:from-blue-500 hover:to-pink-500 text-white font-medium py-3 px-6 rounded-xl text-sm transition-all shadow-lg shadow-blue-600/20 cursor-pointer active:scale-98 flex items-center justify-center gap-2">
+                  <i class="fa-solid fa-paper-plane"></i> Enviar Mensaje
+                  </button>
+             </form>     
+            </div>
+
+            <!-- Columna Derecha: Mapa y Accesos Directos -->
+            <div class="space-y-6">
+                
+                <!-- Tarjeta de Mapa de Ubicación -->
+                <div class="bg-slate-900/90 border border-slate-800/80 rounded-2xl p-6 shadow-xl space-y-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-pink-500/10 border border-pink-500/20 flex items-center justify-center text-pink-400">
+                            <i class="fa-solid fa-location-dot"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-white text-base">Encuéntranos</h4>
+                            <p class="text-xs text-slate-400">Visítanos en nuestro local principal</p>
+                        </div>
+                    </div>
+                    
+                    <div class="w-full h-48 rounded-xl overflow-hidden border border-slate-800 relative">
+                        <iframe 
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3484.5!2d-66.85!3d-29.41!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjnCsDI0JzM2LjAiUyA2NsKwNTEnMDAuMCJX!5e0!3m2!1ses!2sar!4v1620000000000!5m2!1ses!2sar" 
+                            width="100%" 
+                            height="100%" 
+                            style="border:0;" 
+                            allowfullscreen="" 
+                            loading="lazy" 
+                            class="w-full h-full grayscale contrast-125 opacity-80 hover:grayscale-0 transition-all">
+                        </iframe>
+                    </div>
+                    <p class="text-xs text-slate-400 text-center flex items-center justify-center gap-1">
+                        <i class="fa-regular fa-clock text-blue-400"></i> Lun a Sáb: 09:00 - 21:00 hs
+                    </p>
+                </div>
+
+                <!-- Enlaces de Contacto y Redes (WhatsApp, Instagram y Facebook) -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    
+                    <!-- WhatsApp -->
+                    <a href="https://wa.me/" target="_blank" class="bg-slate-900/90 hover:bg-slate-800/80 border border-slate-800/80 p-4 rounded-2xl flex items-center gap-3 transition-all group">
+                        <div class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 text-lg group-hover:scale-110 transition-transform">
+                            <i class="fa-brands fa-whatsapp"></i>
+                        </div>
+                        <div>
+                            <span class="text-[10px] text-slate-400 block font-medium">Escríbenos</span>
+                            <span class="text-white font-bold text-xs">WhatsApp</span>
+                        </div>
+                    </a>
+
+                    <!-- Instagram -->
+                    <a href="https://instagram.com" target="_blank" class="bg-slate-900/90 hover:bg-slate-800/80 border border-slate-800/80 p-4 rounded-2xl flex items-center gap-3 transition-all group">
+                        <div class="w-10 h-10 rounded-xl bg-pink-500/10 border border-pink-500/20 flex items-center justify-center text-pink-400 text-lg group-hover:scale-110 transition-transform">
+                            <i class="fa-brands fa-instagram"></i>
+                        </div>
+                        <div>
+                            <span class="text-[10px] text-slate-400 block font-medium">Síguenos</span>
+                            <span class="text-white font-bold text-xs">Instagram</span>
+                        </div>
+                    </a>
+
+                    <!-- Facebook -->
+                    <a href="https://facebook.com" target="_blank" class="bg-slate-900/90 hover:bg-slate-800/80 border border-slate-800/80 p-4 rounded-2xl flex items-center gap-3 transition-all group">
+                        <div class="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 text-lg group-hover:scale-110 transition-transform">
+                            <i class="fa-brands fa-facebook-f"></i>
+                        </div>
+                        <div>
+                            <span class="text-[10px] text-slate-400 block font-medium">Visítanos</span>
+                            <span class="text-white font-bold text-xs">Facebook</span>
+                        </div>
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+    <script src="/js/mail.js"></script>
+</section>
