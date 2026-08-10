@@ -3,6 +3,7 @@
 // ==========================================
 require('dotenv').config();
 const express = require('express');
+const session = require('express-session'); // Módulo de sesiones agregado
 const path = require('path');
 const expressLayouts = require('express-ejs-layouts');
 const db = require('./src/config/db'); 
@@ -22,10 +23,18 @@ app.use(express.static('public'));
 app.set('layout', 'layouts/public');
 
 // ==========================================
-// 2. MIDDLEWARES ESENCIALES
+// 2. MIDDLEWARES ESENCIALES Y DE SESIÓN
 // ==========================================
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Configuración de Sesiones para manejar el logout y seguridad
+app.use(session({
+    secret: process.env.SESSION_SECRET || 'buhobarber_secreto_seguro_2026',
+    resave: false,
+    saveUninitialized: false,
+    cookie: { secure: false } // Cambiar a true si configuras HTTPS estricto
+}));
 
 // ==========================================
 // 3. ARCHIVOS ESTÁTICOS Y VISTAS DEL PORTAL
@@ -78,6 +87,24 @@ app.get('/login.html', (req, res) => {
     res.redirect('/login');
 });
 
+// ==========================================
+// RUTA DE CIERRE DE SESIÓN (LOGOUT)
+// ==========================================
+app.get('/logout', (req, res) => {
+    if (req.session) {
+        req.session.destroy((err) => {
+            if (err) {
+                console.error('Error al destruir la sesión:', err);
+            }
+            res.clearCookie('connect.sid'); // Limpia la cookie de sesión del navegador
+            return res.redirect('/login');
+        });
+    } else {
+        // Si no hay sesión activa, redirige al login igual
+        return res.redirect('/login');
+    }
+});
+
 app.post('/login', async (req, res) => {
     try {
         console.log('--- INTENTO DE LOGIN ---');
@@ -105,8 +132,6 @@ app.post('/login', async (req, res) => {
     }
 });
 
-
-
 // ==========================================
 // 7. IMPORTAR Y REGISTRAR DEMÁS RUTAS
 // ==========================================
@@ -119,7 +144,6 @@ const clienteRoutes = require('./src/routes/clienteRoutes');
 const configuracionRoutes = require('./src/routes/configuracionRoutes');
 const indumentariaRoutes = require('./src/routes/indumentariaRoutes');
 const mailRoutes = require('./src/routes/mailRoutes'); 
-const estadisticasRoutes = require('./src/routes/adminViewRoutes.js');
 
 app.use('/', servicioRoutes);
 app.use('/', barberoRoutes);
@@ -131,7 +155,6 @@ app.use(configuracionRoutes);
 app.use('/', auditoriaRoutes);
 app.use('/', indumentariaRoutes);
 app.use('/api/mail', mailRoutes);
-app.use('/', adminViewRoutes);
 
 // ==========================================
 // 8. INICIAR EL SERVIDOR

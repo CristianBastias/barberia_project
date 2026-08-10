@@ -51,7 +51,7 @@ async function cargarServicios() {
             tbody.appendChild(tr);
         });
     } catch (error) {
-        console.error('Error:', error);
+        console.error('Error al cargar servicios:', error);
     }
 }
 
@@ -108,17 +108,20 @@ function prepararEditarServicio(id, nombre, precio, duracion) {
     const inputDuracion = document.getElementById('duracionServicio');
     if (inputDuracion) inputDuracion.value = duracion;
 
-    // Cambios visuales: Borde naranja y fondo sutil de edición
-    const cardForm = document.getElementById('formServicio').closest('div');
-    if (cardForm) {
-        cardForm.classList.remove('border-slate-800/80');
-        cardForm.classList.add('border-amber-500/50', 'bg-amber-950/10');
+    // EFECTO VISUAL NARANJA (idéntico a indumentaria.js)
+    const formServicioElement = document.getElementById('formServicio');
+    if (formServicioElement) {
+        const cardForm = formServicioElement.closest('div.bg-slate-900') || formServicioElement.closest('div[class*="bg-slate"]') || formServicioElement.parentElement;
+        if (cardForm) {
+            cardForm.classList.remove('border-slate-800', 'border-slate-800/80');
+            cardForm.classList.add('border-amber-500/50', 'bg-amber-950/10', 'transition-all', 'duration-300');
+        }
     }
 
     const btnSubmit = document.getElementById('btnSubmitServicio') || document.querySelector('#formServicio button[type="submit"]');
     if (btnSubmit) {
-        btnSubmit.innerText = 'Actualizar Cambios';
-        btnSubmit.className = "bg-amber-600 hover:bg-amber-500 text-white font-medium px-4 py-2.5 rounded-xl text-sm transition-all shadow-md cursor-pointer w-full sm:w-auto";
+        btnSubmit.innerText = 'Actualizar Servicio';
+        btnSubmit.className = "w-full bg-amber-600 hover:bg-amber-500 text-white font-medium py-2.5 px-6 rounded-xl text-sm transition-all shadow-md cursor-pointer flex items-center justify-center gap-2";
     }
 
     const titulo = document.getElementById('formTituloServicio');
@@ -137,16 +140,18 @@ function resetearFormularioServicio() {
     const inputId = document.getElementById('servicioIdEdit');
     if (inputId) inputId.value = '';
 
-    const cardForm = form ? form.closest('div') : null;
-    if (cardForm) {
-        cardForm.classList.add('border-slate-800/80');
-        cardForm.classList.remove('border-amber-500/50', 'bg-amber-950/10');
+    if (form) {
+        const cardForm = form.closest('div.bg-slate-900') || form.closest('div[class*="bg-slate"]') || form.parentElement;
+        if (cardForm) {
+            cardForm.classList.remove('border-amber-500/50', 'bg-amber-950/10');
+            cardForm.classList.add('border-slate-800/80');
+        }
     }
 
     const btnSubmit = document.getElementById('btnSubmitServicio') || document.querySelector('#formServicio button[type="submit"]');
     if (btnSubmit) {
         btnSubmit.innerText = 'Guardar Servicio';
-        btnSubmit.className = "bg-blue-600 hover:bg-blue-500 text-white font-medium px-4 py-2.5 rounded-xl text-sm transition-all shadow-md cursor-pointer w-full sm:w-auto";
+        btnSubmit.className = "w-full bg-blue-600 hover:bg-blue-500 text-white font-medium py-2.5 px-6 rounded-xl text-sm transition-all shadow-md cursor-pointer flex items-center justify-center gap-2";
     }
 
     const titulo = document.getElementById('formTituloServicio');
