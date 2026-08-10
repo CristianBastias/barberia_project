@@ -21,17 +21,17 @@
         }
     </style>
 </head>
-<body class="bg-[#f8fafc] text-slate-100 antialiased selection:bg-blue-500 selection:text-white">
+<body class="bg-[#f8fafc] text-slate-800 antialiased selection:bg-blue-500 selection:text-white">
 
     <!-- HERO SECTION CON IMAGEN DE FONDO PANORÁMICA (Parte Superior) -->
     <header id="inicio" class="relative min-h-[85vh] md:min-h-[92vh] flex items-center justify-center overflow-hidden px-4 sm:px-8 py-24">
         <!-- IMAGEN DE FONDO PANORÁMICA Y CON MOVIMIENTO SUAVE -->
         <div class="absolute inset-0 z-0 overflow-hidden flex items-center justify-center bg-slate-900">
-            <img src="/img/buho-clasico.jpg" alt="Fondo Búho Barber Studio" class="w-full h-full object-cover md:object-center opacity-70 animate-kenburns">
+            <img src="/img/buho-clasico.jpg" alt="Fondo Búho Barber Studio" class="w-full h-full object-cover md:object-center opacity-60 animate-kenburns">
         </div>
 
-        <!-- CAPA OSCURA MENOS DENSA PARA MEJORAR LUMINOSIDAD -->
-        <div class="absolute inset-0 bg-gradient-to-b from-[#0f172a]/70 via-[#0f172a]/50 to-[#0f172a]/80 backdrop-blur-[1px] z-10"></div>
+        <!-- CAPA OSCURA EQUILIBRADA PARA DESTACAR EL HERO -->
+        <div class="absolute inset-0 bg-gradient-to-b from-slate-950/80 via-slate-900/60 to-slate-950/90 backdrop-blur-[1px] z-10"></div>
 
         <!-- CONTENIDO -->
         <div class="relative z-20 max-w-4xl text-center flex flex-col items-center gap-6">
@@ -53,19 +53,19 @@
     <!-- SECCIÓN TENDENCIAS - CARRUSEL MODERNO -->
     <section id="tendencias" class="py-20 px-4 sm:px-8 max-w-7xl mx-auto overflow-hidden">
         <div class="text-center max-w-2xl mx-auto mb-12">
-            <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-2">
-                Tendencias <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-pink-500">2026</span>
+            <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mb-2">
+                Tendencias <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-pink-600">2026</span>
             </h2>
-            <p class="text-slate-300 text-sm sm:text-base">Descubre los estilos más pedidos por la nueva generación</p>
+            <p class="text-slate-600 text-sm sm:text-base">Descubre los estilos más pedidos por la nueva generación</p>
         </div>
         
         <!-- Contenedor Desplazable del Carrusel -->
         <div id="carruselTendencias" class="flex gap-6 overflow-x-auto snap-x snap-mandatory scrollbar-none pb-4 focus:outline-none" style="scroll-behavior: smooth; -ms-overflow-style: none; scrollbar-width: none;">
             
             <!-- TARJETA 01 -->
-            <div class="min-w-[300px] sm:min-w-[380px] md:min-w-[400px] flex-shrink-0 snap-start relative group overflow-hidden rounded-2xl border border-slate-700/60 shadow-2xl min-h-[380px] flex flex-col justify-end p-6 bg-slate-900">
+            <div class="min-w-[300px] sm:min-w-[380px] md:min-w-[400px] flex-shrink-0 snap-start relative group overflow-hidden rounded-2xl border border-slate-200 shadow-xl min-h-[380px] flex flex-col justify-end p-6 bg-slate-900">
                 <div class="absolute inset-0 bg-cover bg-center group-hover:scale-110 transition-transform duration-700 ease-out opacity-85" style="background-image: url('/img/tendencia1.jpg');"></div>
-                <div class="absolute inset-0 bg-gradient-to-t from-[#0f172a] via-[#0f172a]/70 to-transparent"></div>
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/70 to-transparent"></div>
                 
                 <div class="relative z-10">
                     <span class="text-xs font-bold text-blue-400 uppercase tracking-widest">Estilo 01</span>
@@ -75,9 +75,9 @@
             </div>
 
             <!-- TARJETA 02 -->
-            <div class="min-w-[300px] sm:min-w-[380px] md:min-w-[400px] flex-shrink-0 snap-start relative group overflow-hidden rounded-2xl border border-slate-700/60 shadow-2xl min-h-[380px] flex flex-col justify-end p-6 bg-slate-900">
+            <div class="min-w-[300px] sm:min-w-[380px] md:min-w-[400px] flex-shrink-0 snap-start relative group overflow-hidden rounded-2xl border border-slate-200 shadow-xl min-h-[380px] flex flex-col justify-end p-6 bg-slate-900">
                 <div class="absolute inset-0 bg-cover bg-center group-hover:scale-110 transition-transform duration-700 ease-out opacity-85" style="background-image: url('/img/servicio2.jpg');"></div>
-                <div class="absolute inset-0 bg-gradient-to-t from-[#0f172a] via-[#0f172a]/70 to-transparent"></div>
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/70 to-transparent"></div>
                 
                 <div class="relative z-10">
                     <span class="text-xs font-bold text-blue-400 uppercase tracking-widest">Estilo 02</span>
@@ -87,9 +87,9 @@
             </div>
 
             <!-- TARJETA 03 -->
-            <div class="min-w-[300px] sm:min-w-[380px] md:min-w-[400px] flex-shrink-0 snap-start relative group overflow-hidden rounded-2xl border border-slate-700/60 shadow-2xl min-h-[380px] flex flex-col justify-end p-6 bg-slate-900">
+            <div class="min-w-[300px] sm:min-w-[380px] md:min-w-[400px] flex-shrink-0 snap-start relative group overflow-hidden rounded-2xl border border-slate-200 shadow-xl min-h-[380px] flex flex-col justify-end p-6 bg-slate-900">
                 <div class="absolute inset-0 bg-cover bg-center group-hover:scale-110 transition-transform duration-700 ease-out opacity-85" style="background-image: url('/img/servicio3.jpg');"></div>
-                <div class="absolute inset-0 bg-gradient-to-t from-[#0f172a] via-[#0f172a]/70 to-transparent"></div>
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/70 to-transparent"></div>
                 
                 <div class="relative z-10">
                     <span class="text-xs font-bold text-blue-400 uppercase tracking-widest">Estilo 03</span>
@@ -99,9 +99,9 @@
             </div>
 
             <!-- TARJETA 04 -->
-            <div class="min-w-[300px] sm:min-w-[380px] md:min-w-[400px] flex-shrink-0 snap-start relative group overflow-hidden rounded-2xl border border-slate-700/60 shadow-2xl min-h-[380px] flex flex-col justify-end p-6 bg-slate-900">
+            <div class="min-w-[300px] sm:min-w-[380px] md:min-w-[400px] flex-shrink-0 snap-start relative group overflow-hidden rounded-2xl border border-slate-200 shadow-xl min-h-[380px] flex flex-col justify-end p-6 bg-slate-900">
                 <div class="absolute inset-0 bg-cover bg-center group-hover:scale-110 transition-transform duration-700 ease-out opacity-85" style="background-image: url('/img/servicio1.jpg');"></div>
-                <div class="absolute inset-0 bg-gradient-to-t from-[#0f172a] via-[#0f172a]/70 to-transparent"></div>
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/70 to-transparent"></div>
                 
                 <div class="relative z-10">
                     <span class="text-xs font-bold text-blue-400 uppercase tracking-widest">Estilo 04</span>
@@ -114,10 +114,10 @@
 
         <!-- BOTONES DE CONTROL -->
         <div class="flex items-center justify-center gap-4 mt-8">
-            <button onclick="scrollCarrusel('left')" class="w-12 h-12 rounded-xl bg-slate-800 border border-slate-700 hover:border-blue-400 hover:bg-slate-700 text-white flex items-center justify-center transition-all shadow-md active:scale-95 cursor-pointer">
+            <button onclick="scrollCarrusel('left')" class="w-12 h-12 rounded-xl bg-white border border-slate-200 hover:border-blue-500 hover:bg-slate-50 text-slate-700 flex items-center justify-center transition-all shadow-md active:scale-95 cursor-pointer">
                 <i class="fa-solid fa-arrow-left"></i>
             </button>
-            <button onclick="scrollCarrusel('right')" class="w-12 h-12 rounded-xl bg-slate-800 border border-slate-700 hover:border-blue-400 hover:bg-slate-700 text-white flex items-center justify-center transition-all shadow-md active:scale-95 cursor-pointer">
+            <button onclick="scrollCarrusel('right')" class="w-12 h-12 rounded-xl bg-white border border-slate-200 hover:border-blue-500 hover:bg-slate-50 text-slate-700 flex items-center justify-center transition-all shadow-md active:scale-95 cursor-pointer">
                 <i class="fa-solid fa-arrow-right"></i>
             </button>
         </div>
@@ -136,44 +136,44 @@
     </script>
 
     <!-- SERVICIOS -->
-    <section id="servicios" class="py-20 px-4 sm:px-8 max-w-7xl mx-auto bg-slate-900/40 rounded-3xl my-10 border border-slate-800 shadow-xl">
+    <section id="servicios" class="py-20 px-4 sm:px-8 max-w-7xl mx-auto bg-white rounded-3xl my-10 border border-slate-200 shadow-xl">
         <div class="text-center max-w-2xl mx-auto mb-16">
-            <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-3">
-                Nuestros <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-pink-500">Servicios</span>
+            <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mb-3">
+                Nuestros <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-pink-600">Servicios</span>
             </h2>
-            <p class="text-slate-300 text-sm sm:text-base">Tecnología, precisión y cuidado personal de primer nivel</p>
+            <p class="text-slate-600 text-sm sm:text-base">Tecnología, precisión y cuidado personal de primer nivel</p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
             <% if (servicios && servicios.length > 0) { %>
                 <% servicios.slice(0, 3).forEach(servicio => { %>
-                    <div class="relative overflow-hidden bg-slate-900 border border-slate-700/80 rounded-2xl p-8 flex flex-col items-start gap-4 shadow-xl hover:border-blue-500/60 transition-all group">
+                    <div class="relative overflow-hidden bg-slate-50 border border-slate-200 rounded-2xl p-8 flex flex-col items-start gap-4 shadow-md hover:border-blue-500/60 transition-all group">
                         
-                        <div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 ease-out group-hover:scale-110 z-0 opacity-75" style="background-image: linear-gradient(to bottom, rgba(15, 23, 42, 0.80), rgba(15, 23, 42, 0.90)), url('<%= servicio.imagen ? `/uploads/${servicio.imagen}` : `/img/servicio1.jpg` %>');"></div>
+                        <div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 ease-out group-hover:scale-110 z-0 opacity-20" style="background-image: url('<%= servicio.imagen ? `/uploads/${servicio.imagen}` : `/img/servicio1.jpg` %>');"></div>
 
-                        <div class="relative z-10 w-14 h-14 rounded-2xl bg-blue-500/20 border border-blue-500/40 flex items-center justify-center text-blue-300 text-xl group-hover:scale-110 transition-transform shadow">
+                        <div class="relative z-10 w-14 h-14 rounded-2xl bg-blue-600/10 border border-blue-600/20 flex items-center justify-center text-blue-600 text-xl group-hover:scale-110 transition-transform shadow-sm">
                             <i class="fa-solid fa-scissors"></i>
                         </div>
                         
-                        <h3 class="relative z-10 text-xl font-bold text-white"><%= servicio.nombre %></h3>
+                        <h3 class="relative z-10 text-xl font-bold text-slate-900"><%= servicio.nombre %></h3>
                         
-                        <p class="relative z-10 text-slate-300 text-sm leading-relaxed">
+                        <p class="relative z-10 text-slate-600 text-sm leading-relaxed">
                             Servicio profesional personalizado. Duración estimada: <%= servicio.duracion %> días.
                         </p>
                         
                         <!-- PRECIO SIN DECIMALES USANDO maximumFractionDigits: 0 -->
-                        <div class="relative z-10 mt-auto pt-4 border-t border-slate-700/80 w-full font-extrabold text-pink-400 text-lg">
+                        <div class="relative z-10 mt-auto pt-4 border-t border-slate-200 w-full font-extrabold text-pink-600 text-lg">
                             Desde $<%= Number(servicio.precio).toLocaleString('es-AR', { maximumFractionDigits: 0 }) %>
                         </div>
                     </div>
                 <% }) %>
             <% } else { %>
-                <p class="text-slate-300 text-center col-span-3">No hay servicios disponibles en este momento.</p>
+                <p class="text-slate-500 text-center col-span-3">No hay servicios disponibles en este momento.</p>
             <% } %>
         </div>
 
         <div class="mt-16 text-center space-y-4">
-            <p class="text-slate-300 italic text-sm sm:text-base">
+            <p class="text-slate-600 italic text-sm sm:text-base">
                 "Elevamos tu estilo con cada detalle; descubre nuestra experiencia completa."
             </p>
             <div>
@@ -187,31 +187,31 @@
     <!-- BARBEROS / STAFF -->
     <section id="barberos" class="py-20 px-4 sm:px-8 max-w-7xl mx-auto">
         <div class="text-center max-w-2xl mx-auto mb-16">
-            <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-3">
-                Nuestro <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-pink-500">Staff</span>
+            <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mb-3">
+                Nuestro <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-pink-600">Staff</span>
             </h2>
-            <p class="text-slate-300 text-sm sm:text-base">Expertos apasionados por el arte de la barbería</p>
+            <p class="text-slate-600 text-sm sm:text-base">Expertos apasionados por el arte de la barbería</p>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl group">
+            <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-xl group">
                 <div class="h-72 bg-cover bg-center group-hover:scale-105 transition-transform duration-500" style="background-image: url('https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80');"></div>
                 <div class="p-6 text-center">
-                    <h3 class="text-xl font-bold text-white mb-1">Axel "Master Fade"</h3>
-                    <span class="text-xs uppercase tracking-widest text-blue-400 font-semibold">Especialista en Fades</span>
+                    <h3 class="text-xl font-bold text-slate-900 mb-1">Axel "Master Fade"</h3>
+                    <span class="text-xs uppercase tracking-widest text-blue-600 font-semibold">Especialista en Fades</span>
                 </div>
             </div>
-            <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl group">
+            <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-xl group">
                 <div class="h-72 bg-cover bg-center group-hover:scale-105 transition-transform duration-500" style="background-image: url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80');"></div>
                 <div class="p-6 text-center">
-                    <h3 class="text-xl font-bold text-white mb-1">Lucas "Blade"</h3>
-                    <span class="text-xs uppercase tracking-widest text-blue-400 font-semibold">Barbas & Estilo Clásico</span>
+                    <h3 class="text-xl font-bold text-slate-900 mb-1">Lucas "Blade"</h3>
+                    <span class="text-xs uppercase tracking-widest text-blue-600 font-semibold">Barbas & Estilo Clásico</span>
                 </div>
             </div>
-            <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl group">
+            <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-xl group">
                 <div class="h-72 bg-cover bg-center group-hover:scale-105 transition-transform duration-500" style="background-image: url('https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=600&q=80');"></div>
                 <div class="p-6 text-center">
-                    <h3 class="text-xl font-bold text-white mb-1">Franco "Stylist"</h3>
-                    <span class="text-xs uppercase tracking-widest text-blue-400 font-semibold">Colorimetría & Tendencias</span>
+                    <h3 class="text-xl font-bold text-slate-900 mb-1">Franco "Stylist"</h3>
+                    <span class="text-xs uppercase tracking-widest text-blue-600 font-semibold">Colorimetría & Tendencias</span>
                 </div>
             </div>
         </div>
@@ -219,9 +219,9 @@
 
     <!-- ANEXO INDUMENTARIA & MERCH -->
     <section id="indumentaria" class="py-20 px-4 sm:px-8 max-w-7xl mx-auto">
-        <div class="bg-gradient-to-r from-blue-900/40 via-slate-900 to-pink-900/30 border border-slate-800 rounded-3xl p-8 sm:p-12 flex flex-col md:flex-row items-center justify-between gap-8 shadow-2xl">
+        <div class="bg-gradient-to-r from-blue-900 via-slate-900 to-slate-950 border border-slate-800 rounded-3xl p-8 sm:p-12 flex flex-col md:flex-row items-center justify-between gap-8 shadow-2xl text-white">
             <div class="max-w-xl">
-                <h3 class="text-2xl sm:text-3xl font-extrabold text-white mb-3">BÚHO <span class="text-pink-400">Apparel & Merch</span></h3>
+                <h3 class="text-2xl sm:text-3xl font-extrabold mb-3">BÚHO <span class="text-pink-400">Apparel & Merch</span></h3>
                 <p class="text-slate-200 text-sm sm:text-base leading-relaxed mb-6">No solo cortamos el pelo, vivimos la cultura urbana. Explora nuestra línea exclusiva de remeras oversize, gorras snapback y accesorios de cuidado personal.</p>
                 <a href="/indumentaria" class="inline-flex items-center gap-2.5 px-6 py-3 bg-gradient-to-r from-blue-600 to-pink-600 hover:from-blue-500 hover:to-pink-500 text-white font-bold text-xs sm:text-sm rounded-xl shadow-lg transition-all">
                     <i class="fa-solid fa-bolt"></i> Consultar Catálogo
@@ -237,18 +237,18 @@
     <!-- SECCIÓN UNIFICADA: ¿QUIÉNES SOMOS Y CONTACTO? -->
     <section id="quienes-somos" class="py-20 px-4 sm:px-8 max-w-7xl mx-auto space-y-16">
         <div class="text-center max-w-2xl mx-auto">
-            <span class="text-xs font-bold text-pink-400 uppercase tracking-widest block mb-2">Nuestra Esencia</span>
-            <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-3">
-                ¿Quiénes <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-pink-500">Somos?</span>
+            <span class="text-xs font-bold text-pink-600 uppercase tracking-widest block mb-2">Nuestra Esencia</span>
+            <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mb-3">
+                ¿Quiénes <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-pink-600">Somos?</span>
             </h2>
-            <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+            <p class="text-slate-600 text-sm sm:text-base leading-relaxed">
                 Más que un corte, una cultura. Fusionamos la precisión de la barbería clásica con la vanguardia de la estética urbana moderna para ofrecerte una experiencia única en cada visita.
             </p>
         </div>
         
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div class="relative group overflow-hidden rounded-2xl border border-slate-800 shadow-xl min-h-[380px] flex flex-col justify-end p-6 bg-cover bg-center" style="background-image: url('/img/local1.jpg');">
-                <div class="absolute inset-0 bg-gradient-to-t from-[#0f172a] via-[#0f172a]/75 to-transparent"></div>
+            <div class="relative group overflow-hidden rounded-2xl border border-slate-200 shadow-xl min-h-[380px] flex flex-col justify-end p-6 bg-cover bg-center" style="background-image: url('/img/local1.jpg');">
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/75 to-transparent"></div>
                 <div class="relative z-10">
                     <span class="text-xs font-bold text-blue-400 uppercase tracking-widest">Maestría & Arte</span>
                     <h3 class="text-xl font-bold text-white mt-1 mb-2">Precisión en Cada Detalle</h3>
@@ -256,8 +256,8 @@
                 </div>
             </div>
 
-            <div class="relative group overflow-hidden rounded-2xl border border-slate-800 shadow-xl min-h-[380px] flex flex-col justify-end p-6 bg-cover bg-center" style="background-image: url('/img/local2.jpg');">
-                <div class="absolute inset-0 bg-gradient-to-t from-[#0f172a] via-[#0f172a]/75 to-transparent"></div>
+            <div class="relative group overflow-hidden rounded-2xl border border-slate-200 shadow-xl min-h-[380px] flex flex-col justify-end p-6 bg-cover bg-center" style="background-image: url('/img/local2.jpg');">
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/75 to-transparent"></div>
                 <div class="relative z-10">
                     <span class="text-xs font-bold text-blue-400 uppercase tracking-widest">Vibra Exclusiva</span>
                     <h3 class="text-xl font-bold text-white mt-1 mb-2">Un Espacio Diseñado para Vos</h3>
@@ -265,8 +265,8 @@
                 </div>
             </div>
 
-            <div class="relative group overflow-hidden rounded-2xl border border-slate-800 shadow-xl min-h-[380px] flex flex-col justify-end p-6 bg-cover bg-center" style="background-image: url('/img/local3.jpg');">
-                <div class="absolute inset-0 bg-gradient-to-t from-[#0f172a] via-[#0f172a]/75 to-transparent"></div>
+            <div class="relative group overflow-hidden rounded-2xl border border-slate-200 shadow-xl min-h-[380px] flex flex-col justify-end p-6 bg-cover bg-center" style="background-image: url('/img/local3.jpg');">
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/75 to-transparent"></div>
                 <div class="relative z-10">
                     <span class="text-xs font-bold text-blue-400 uppercase tracking-widest">Cultura Urbana</span>
                     <h3 class="text-xl font-bold text-white mt-1 mb-2">Pasión por lo que Hacemos</h3>
@@ -276,51 +276,51 @@
         </div>
 
         <!-- Contacto -->
-        <div id="contacto-seccion" class="bg-slate-900/70 rounded-3xl p-6 sm:p-10 border border-slate-800 shadow-2xl">
+        <div id="contacto-seccion" class="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-xl">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
                 
-                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-8 shadow-xl space-y-6">
+                <div class="bg-slate-50 border border-slate-200 rounded-2xl p-8 shadow-sm space-y-6">
                     <div>
-                        <span class="text-blue-400 text-xs font-semibold tracking-wider uppercase bg-blue-500/15 px-3 py-1 rounded-full border border-blue-500/30">Tu opinión importa</span>
-                        <h3 class="text-2xl font-bold text-white mt-3">Déjanos tu consulta o comentario</h3>
-                        <p class="text-slate-300 text-sm mt-1 italic">"Tu comentario nos hace ser cada día mejores."</p>
+                        <span class="text-blue-600 text-xs font-semibold tracking-wider uppercase bg-blue-500/10 px-3 py-1 rounded-full border border-blue-500/20">Tu opinión importa</span>
+                        <h3 class="text-2xl font-bold text-slate-900 mt-3">Déjanos tu consulta o comentario</h3>
+                        <p class="text-slate-600 text-sm mt-1 italic">"Tu comentario nos hace ser cada día mejores."</p>
                     </div>
 
                     <form id="formContactoPublico" class="space-y-4">
                         <div>
-                            <label for="nombreContacto" class="block text-xs font-medium text-slate-200 mb-1.5">Tu Nombre *</label>
-                            <input type="text" id="nombreContacto" required class="w-full bg-slate-950 border border-slate-800 text-slate-100 px-4 py-3 rounded-xl text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all placeholder:text-slate-500" placeholder="Ej: Carlos Gómez">
+                            <label for="nombreContacto" class="block text-xs font-medium text-slate-700 mb-1.5">Tu Nombre *</label>
+                            <input type="text" id="nombreContacto" required class="w-full bg-white border border-slate-300 text-slate-800 px-4 py-3 rounded-xl text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all placeholder:text-slate-400" placeholder="Ej: Carlos Gómez">
                         </div>
 
                         <div>
-                            <label for="emailContacto" class="block text-xs font-medium text-slate-200 mb-1.5">Correo Electrónico *</label>
-                            <input type="email" id="emailContacto" required class="w-full bg-slate-950 border border-slate-800 text-slate-100 px-4 py-3 rounded-xl text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all placeholder:text-slate-500" placeholder="tu@correo.com">
+                            <label for="emailContacto" class="block text-xs font-medium text-slate-700 mb-1.5">Correo Electrónico *</label>
+                            <input type="email" id="emailContacto" required class="w-full bg-white border border-slate-300 text-slate-800 px-4 py-3 rounded-xl text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all placeholder:text-slate-400" placeholder="tu@correo.com">
                         </div>
 
                         <div>
-                            <label for="mensajeContacto" class="block text-xs font-medium text-slate-200 mb-1.5">Mensaje o Sugerencia *</label>
-                            <textarea id="mensajeContacto" rows="4" required class="w-full bg-slate-950 border border-slate-800 text-slate-100 px-4 py-3 rounded-xl text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all placeholder:text-slate-500" placeholder="¿Cómo fue tu experiencia o qué consulta tienes?"></textarea>
+                            <label for="mensajeContacto" class="block text-xs font-medium text-slate-700 mb-1.5">Mensaje o Sugerencia *</label>
+                            <textarea id="mensajeContacto" rows="4" required class="w-full bg-white border border-slate-300 text-slate-800 px-4 py-3 rounded-xl text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all placeholder:text-slate-400" placeholder="¿Cómo fue tu experiencia o qué consulta tienes?"></textarea>
                         </div>
 
-                        <button type="submit" id="btnEnviarPublico" class="w-full bg-gradient-to-r from-blue-600 to-pink-600 hover:from-blue-500 hover:to-pink-500 text-white font-medium py-3 px-6 rounded-xl text-sm transition-all shadow-lg shadow-blue-600/30 cursor-pointer active:scale-98 flex items-center justify-center gap-2">
+                        <button type="submit" id="btnEnviarPublico" class="w-full bg-gradient-to-r from-blue-600 to-pink-600 hover:from-blue-500 hover:to-pink-500 text-white font-medium py-3 px-6 rounded-xl text-sm transition-all shadow-lg shadow-blue-600/20 cursor-pointer active:scale-98 flex items-center justify-center gap-2">
                             <i class="fa-solid fa-paper-plane"></i> Enviar Mensaje
                         </button>
                     </form>    
                 </div>
 
                 <div class="space-y-6">
-                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-4">
+                    <div class="bg-slate-50 border border-slate-200 rounded-2xl p-6 shadow-sm space-y-4">
                         <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-xl bg-pink-500/15 border border-pink-500/30 flex items-center justify-center text-pink-400">
+                            <div class="w-10 h-10 rounded-xl bg-pink-500/10 border border-pink-500/20 flex items-center justify-center text-pink-600">
                                 <i class="fa-solid fa-location-dot"></i>
                             </div>
                             <div>
-                                <h4 class="font-bold text-white text-base">Encuéntranos</h4>
-                                <p class="text-xs text-slate-300">Visítanos en nuestro local principal</p>
+                                <h4 class="font-bold text-slate-900 text-base">Encuéntranos</h4>
+                                <p class="text-xs text-slate-600">Visítanos en nuestro local principal</p>
                             </div>
                         </div>
                         
-                        <div class="w-full h-48 rounded-xl overflow-hidden border border-slate-800 relative">
+                        <div class="w-full h-48 rounded-xl overflow-hidden border border-slate-200 relative">
                             <iframe 
                                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3484.5!2d-66.85!3d-29.41!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjnCsDI0JzM2LjAiUyA2NsKwNTEnMDAuMCJX!5e0!3m2!1ses!2sar!4v1620000000000!5m2!1ses!2sar" 
                                 width="100%" 
@@ -331,39 +331,39 @@
                                 class="w-full h-full grayscale contrast-125 opacity-85 hover:grayscale-0 transition-all">
                             </iframe>
                         </div>
-                        <p class="text-xs text-slate-300 text-center flex items-center justify-center gap-1">
-                            <i class="fa-regular fa-clock text-blue-400"></i> Lun a Sáb: 09:00 - 21:00 hs
+                        <p class="text-xs text-slate-600 text-center flex items-center justify-center gap-1">
+                            <i class="fa-regular fa-clock text-blue-600"></i> Lun a Sáb: 09:00 - 21:00 hs
                         </p>
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                        <a href="https://wa.me/" target="_blank" class="bg-slate-900 hover:bg-slate-800 border border-slate-800 p-4 rounded-2xl flex items-center gap-3 transition-all group">
-                            <div class="w-10 h-10 rounded-xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400 text-lg group-hover:scale-110 transition-transform">
+                        <a href="https://wa.me/" target="_blank" class="bg-slate-50 hover:bg-slate-100 border border-slate-200 p-4 rounded-2xl flex items-center gap-3 transition-all group">
+                            <div class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-600 text-lg group-hover:scale-110 transition-transform">
                                 <i class="fa-brands fa-whatsapp"></i>
                             </div>
                             <div>
-                                <span class="text-[10px] text-slate-400 block font-medium">Escríbenos</span>
-                                <span class="text-white font-bold text-xs">WhatsApp</span>
+                                <span class="text-[10px] text-slate-500 block font-medium">Escríbenos</span>
+                                <span class="text-slate-900 font-bold text-xs">WhatsApp</span>
                             </div>
                         </a>
 
-                        <a href="https://instagram.com" target="_blank" class="bg-slate-900 hover:bg-slate-800 border border-slate-800 p-4 rounded-2xl flex items-center gap-3 transition-all group">
-                            <div class="w-10 h-10 rounded-xl bg-pink-500/15 border border-pink-500/30 flex items-center justify-center text-pink-400 text-lg group-hover:scale-110 transition-transform">
+                        <a href="https://instagram.com" target="_blank" class="bg-slate-50 hover:bg-slate-100 border border-slate-200 p-4 rounded-2xl flex items-center gap-3 transition-all group">
+                            <div class="w-10 h-10 rounded-xl bg-pink-500/10 border border-pink-500/20 flex items-center justify-center text-pink-600 text-lg group-hover:scale-110 transition-transform">
                                 <i class="fa-brands fa-instagram"></i>
                             </div>
                             <div>
-                                <span class="text-[10px] text-slate-400 block font-medium">Síguenos</span>
-                                <span class="text-white font-bold text-xs">Instagram</span>
+                                <span class="text-[10px] text-slate-500 block font-medium">Síguenos</span>
+                                <span class="text-slate-900 font-bold text-xs">Instagram</span>
                             </div>
                         </a>
 
-                        <a href="https://facebook.com" target="_blank" class="bg-slate-900 hover:bg-slate-800 border border-slate-800 p-4 rounded-2xl flex items-center gap-3 transition-all group">
-                            <div class="w-10 h-10 rounded-xl bg-blue-500/15 border border-blue-500/30 flex items-center justify-center text-blue-400 text-lg group-hover:scale-110 transition-transform">
+                        <a href="https://facebook.com" target="_blank" class="bg-slate-50 hover:bg-slate-100 border border-slate-200 p-4 rounded-2xl flex items-center gap-3 transition-all group">
+                            <div class="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-600 text-lg group-hover:scale-110 transition-transform">
                                 <i class="fa-brands fa-facebook-f"></i>
                             </div>
                             <div>
-                                <span class="text-[10px] text-slate-400 block font-medium">Visítanos</span>
-                                <span class="text-white font-bold text-xs">Facebook</span>
+                                <span class="text-[10px] text-slate-500 block font-medium">Visítanos</span>
+                                <span class="text-slate-900 font-bold text-xs">Facebook</span>
                             </div>
                         </a>
                     </div>

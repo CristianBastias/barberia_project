@@ -108,7 +108,6 @@ function prepararEditarServicio(id, nombre, precio, duracion) {
     const inputDuracion = document.getElementById('duracionServicio');
     if (inputDuracion) inputDuracion.value = duracion;
 
-    // EFECTO VISUAL NARANJA (idéntico a indumentaria.js)
     const formServicioElement = document.getElementById('formServicio');
     if (formServicioElement) {
         const cardForm = formServicioElement.closest('div.bg-slate-900') || formServicioElement.closest('div[class*="bg-slate"]') || formServicioElement.parentElement;
