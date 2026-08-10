@@ -2,7 +2,7 @@ const db = require('../config/db');
 
 class ServicioRepository {
     async obtenerTodos() {
-        const [servicios] = await db.query('SELECT * FROM servicios WHERE activo = 1');
+        const [servicios] = await db.query('SELECT * FROM servicios WHERE activo = 1 OR activo IS NULL');
         return servicios;
     }
     
@@ -14,8 +14,13 @@ class ServicioRepository {
     
     async actualizar(id, data) {
         const { nombre, precio, duracion, imagen_url } = data;
-        await db.query('UPDATE servicios SET nombre = ?, precio = ?, duracion = ?, imagen_url = ? WHERE id = ?', 
-        [nombre, precio, duracion, imagen_url, id]);
+        if (imagen_url) {
+            await db.query('UPDATE servicios SET nombre = ?, precio = ?, duracion = ?, imagen_url = ? WHERE id = ?', 
+            [nombre, precio, duracion, imagen_url, id]);
+        } else {
+            await db.query('UPDATE servicios SET nombre = ?, precio = ?, duracion = ? WHERE id = ?', 
+            [nombre, precio, duracion, id]);
+        }
     }
     
     async eliminar(id) {
