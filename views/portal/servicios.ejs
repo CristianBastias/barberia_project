@@ -75,55 +75,6 @@
             </table>
         </div>
     </div>
+    <script src="/js/servicios.js"></script>
 </div>
 
-<script>
-    document.addEventListener("DOMContentLoaded", cargarServiciosDesdeBD);
-
-    async function cargarServiciosDesdeBD() {
-        try {
-            const response = await fetch('/api/servicios');
-            const servicios = await response.json();
-            const tbody = document.getElementById('tabla-servicios');
-            tbody.innerHTML = '';
-            
-            servicios.forEach(serv => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td class="py-4 px-6 font-mono text-slate-400">#${serv.id}</td>
-                    <td class="py-4 px-6 font-medium">${serv.nombre}</td>
-                    <td class="py-4 px-6 text-emerald-400">$${Number(serv.precio).toLocaleString()}</td>
-                    <td class="py-4 px-6">${serv.duracion} días</td>
-                    <td class="py-4 px-6 text-right space-x-2">
-                        <button onclick="prepararEditar(${serv.id}, '${serv.nombre}', ${serv.precio}, ${serv.duracion})" class="text-amber-400 p-2"><i class="fa-solid fa-pen"></i></button>
-                        <button onclick="eliminarServicio(${serv.id})" class="text-rose-400 p-2"><i class="fa-solid fa-trash"></i></button>
-                    </td>
-                `;
-                tbody.appendChild(tr);
-            });
-            document.getElementById('total-servicios').innerText = `${servicios.length} servicios`;
-        } catch (e) { console.error(e); }
-    }
-
-    function prepararEditar(id, nombre, precio, duracion) {
-        document.getElementById('servicioId').value = id;
-        document.getElementById('nuevoNombre').value = nombre;
-        document.getElementById('nuevoPrecio').value = precio;
-        document.getElementById('nuevaDuracion').value = duracion;
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    document.getElementById('formNuevoServicio').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const id = document.getElementById('servicioId').value;
-        const formData = new FormData(e.target);
-        
-        const url = id ? `/admin/servicios/${id}` : '/admin/servicios';
-        const method = id ? 'PUT' : 'POST';
-
-        await fetch(url, { method, body: formData });
-        e.target.reset();
-        document.getElementById('servicioId').value = '';
-        cargarServiciosDesdeBD();
-    });
-</script>
