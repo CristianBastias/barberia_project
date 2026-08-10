@@ -81,6 +81,7 @@ function verDetalleServicio(id, nombre, precio, duracion) {
     }
 }
 
+// Expuesto globalmente para que el onclick del HTML lo encuentre sin problemas
 window.prepararEditarServicio = function(id, nombre, precio, duracion) {
     const inputId = document.getElementById('servicioId');
     const inputNombre = document.getElementById('nuevoNombre');
