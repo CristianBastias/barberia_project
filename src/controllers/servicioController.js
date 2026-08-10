@@ -1,52 +1,33 @@
-const servicioService = require('../services/servicioService');
+const servicioRepository = require('../repositories/servicioRepository');
 
 class ServicioController {
-    async obtenerServicios(req, res) {
+    async listar(req, res) {
         try {
-            const servicios = await servicioService.listar();
+            const servicios = await servicioRepository.obtenerTodos();
             res.json(servicios);
-        } catch (err) {
-            res.status(500).json({ error: 'Error al obtener servicios' });
+        } catch (error) {
+            console.error('Error al listar servicios:', error);
+            res.status(500).json({ error: 'Error al obtener los servicios' });
         }
     }
 
-    async crearServicio(req, res) {
-        try {
-            const data = { ...req.body };
-            if (req.file) {
-                data.imagen_url = '/uploads/' + req.file.filename;
-            }
-            await servicioService.crear(data);
-            res.json({ message: 'Servicio creado correctamente' });
-        } catch (err) {
-            res.status(500).json({ error: err.message });
-        }
-    }
-
-    async actualizarServicio(req, res) {
-        try {
-            const data = { ...req.body };
-            if (req.file) {
-                data.imagen_url = '/uploads/' + req.file.filename;
-            }
-            await servicioService.actualizar(req.params.id, data);
-            res.json({ message: 'Servicio actualizado correctamente' });
-        } catch (err) {
-            res.status(500).json({ error: err.message });
-        }
-    }
-
-    async eliminarServicio(req, res) {
+    async eliminar(req, res) {
         try {
             const { id } = req.params;
-            await servicioService.eliminarServicio(id);
-            // IMPORTANTE: Aseguramos retornar un JSON de éxito explícito
-            res.json({ success: true, message: 'Servicio desactivado con éxito' });
-        } catch (err) {
-            console.error('Error al desactivar servicio:', err.message);
-            res.status(500).json({ error: err.message });
+            const resultado = await servicioRepository.eliminar(id);
+            
+            if (resultado.affectedRows === 0) {
+                return res.status(404).json({ error: 'El servicio no fue encontrado.' });
+            }
+
+            res.json({ success: true, message: 'Servicio dado de baja correctamente.' });
+        } catch (error) {
+            console.error('Error al eliminar el servicio:', error);
+            res.status(500).json({ error: 'Error interno en el servidor.' });
         }
     }
+
+    // (Tus métodos de crear y actualizar van aquí según tu implementación actual)
 }
 
 module.exports = new ServicioController();

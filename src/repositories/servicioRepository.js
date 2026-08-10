@@ -24,6 +24,7 @@ class ServicioRepository {
     }
     
     async eliminar(id) {
+        // Baja lógica en MySQL para que no se borre físicamente y mantenga la integridad
         const [result] = await db.query('UPDATE servicios SET activo = 0 WHERE id = ?', [id]);
         return result;
     }

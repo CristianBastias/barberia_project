@@ -13,12 +13,14 @@
    <!-- Formulario para Registrar / Editar Servicio -->
 <div class="bg-slate-900/80 backdrop-blur-md border border-slate-800/80 rounded-2xl p-6 shadow-2xl space-y-5">
     <div class="flex items-center justify-between border-b border-slate-800/80 pb-3">
-        <h3 class="text-sm font-semibold text-blue-400 uppercase tracking-wider flex items-center gap-2">
-            <i class="fa-solid fa-circle-plus"></i> Gestión de Servicios
+        <h3 class="text-sm font-semibold text-blue-400 uppercase tracking-wider flex items-center gap-2" id="formTituloSeccion">
+            <i class="fa-solid fa-circle-plus"></i> Registrar Nuevo Servicio
         </h3>
     </div>
     
+    <!-- El <form> envuelve todo el contenido interactivo y el botón -->
     <form id="formNuevoServicio" class="space-y-4">
+        <!-- Campo oculto para saber si estamos editando -->
         <input type="hidden" id="servicioId" value="">
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
@@ -36,12 +38,14 @@
             </div>
         </div>
 
+        <!-- Campo selector de imagen -->
         <div class="space-y-2">
            <label for="imagenServicio" class="block text-xs font-semibold uppercase tracking-wider text-slate-300">Imagen del Servicio</label>
            <input type="file" id="imagenServicio" name="imagen" accept="image/*"
             class="w-full bg-slate-950/60 border border-slate-800 rounded-xl px-4 py-3 text-white text-sm file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-500 focus:outline-none focus:border-blue-500 transition-all">
         </div>
 
+        <!-- Botón dentro del form que ejecuta la acción de guardar -->
         <div class="flex justify-end gap-3 mt-4">
            <button type="submit" id="btnSubmitServicio" class="bg-blue-600 hover:bg-blue-500 text-white font-medium px-4 py-2.5 rounded-xl text-sm cursor-pointer transition-all">
             Guardar Servicio
@@ -82,5 +86,273 @@
             </table>
         </div>
     </div>
-    <script src="/js/servicios.js"></script>
 </div>
+
+<!-- Script de Gestión y Sincronización -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        cargarServiciosDesdeBD();
+        configurarFormularioServicio();
+    });
+
+    async function cargarServiciosDesdeBD() {
+        try {
+            const response = await fetch('/api/servicios');
+            if (!response.ok) throw new Error('Error al conectar con el servidor');
+            const servicios = await response.json();
+            renderizarTablaServicios(servicios);
+        } catch (error) {
+            console.error("Error al cargar los servicios:", error);
+        }
+    }
+
+    function renderizarTablaServicios(servicios) {
+        const tbody = document.getElementById('tabla-servicios');
+        if (!tbody) return;
+        
+        tbody.innerHTML = ''; 
+
+        if (!servicios || servicios.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="7" class="text-center py-8 text-slate-500 italic">No hay servicios registrados en la base de datos.</td></tr>`;
+            document.getElementById('total-servicios').innerText = `0 servicios`;
+            return;
+        }
+
+        servicios.forEach(serv => {
+            const tr = document.createElement('tr');
+            tr.className = "border-b border-slate-800/50 text-sm text-slate-300 hover:bg-slate-800/30 transition-all duration-150";
+            
+            const activo = serv.activo == 1 || serv.activo === true || serv.activo === null;
+            const estadoBadge = activo 
+                ? `<span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shadow-sm">Activo</span>`
+                : `<span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-rose-500/10 text-rose-400 border border-rose-500/20 shadow-sm">Inactivo</span>`;
+
+            const imgHtml = serv.imagen_url 
+                ? `<span class="text-xs text-slate-400 font-mono bg-slate-950 px-2 py-1 rounded-md border border-slate-800">${serv.imagen_url}</span>` 
+                : `<span class="text-xs text-slate-600 italic">Sin imagen</span>`;
+
+            const precioFormateado = Number(serv.precio).toLocaleString('es-AR', { maximumFractionDigits: 0 });
+
+            tr.innerHTML = `
+                <td class="py-4 px-6 font-mono text-slate-400 text-xs font-medium">#${serv.id}</td>
+                <td class="py-4 px-6">${imgHtml}</td>
+                <td class="py-4 px-6 font-medium text-slate-200">${serv.nombre}</td>
+                <td class="py-4 px-6 text-emerald-400 font-semibold">$${precioFormateado}</td>
+                <td class="py-4 px-6 text-slate-300">${serv.duracion} dias</td>
+                <td class="py-4 px-6">${estadoBadge}</td>
+                <td class="py-4 px-6 text-right whitespace-nowrap space-x-2">
+                    <button type="button" onclick="verDetalleServicio(${serv.id}, '${serv.nombre.replace(/'/g, "\\'")}', '${precioFormateado}', ${serv.duracion})" class="bg-slate-950 hover:bg-blue-600/20 text-blue-400 border border-slate-800 hover:border-blue-500/30 p-2 rounded-xl transition-all shadow-sm cursor-pointer" title="Ver Detalles">
+                        <i class="fa-solid fa-eye text-xs"></i>
+                    </button>
+                    <button type="button" onclick="prepararEditarServicio(${serv.id}, '${serv.nombre.replace(/'/g, "\\'")}', ${serv.precio}, ${serv.duracion})" class="bg-slate-950 hover:bg-amber-600/20 text-amber-400 border border-slate-800 hover:border-amber-500/30 p-2 rounded-xl transition-all shadow-sm cursor-pointer" title="Editar Servicio">
+                        <i class="fa-solid fa-pen-to-square text-xs"></i>
+                    </button>
+                    <button type="button" onclick="eliminarServicio(${serv.id})" class="bg-slate-950 hover:bg-rose-600/20 text-rose-400 border border-slate-800 hover:border-rose-500/30 p-2 rounded-xl transition-all shadow-sm cursor-pointer" title="Eliminar / Desactivar">
+                        <i class="fa-solid fa-trash-can text-xs"></i>
+                    </button>
+                </td>
+            `;
+            tbody.appendChild(tr);
+        });
+
+        document.getElementById('total-servicios').innerText = `${servicios.length} servicios`;
+    }
+
+    function verDetalleServicio(id, nombre, precio, duracion) {
+        if (typeof Swal !== 'undefined') {
+            Swal.fire({
+                icon: 'info',
+                title: `Servicio #${id}`,
+                html: `<b>Nombre:</b> ${nombre}<br><b>Precio:</b> $${precio}<br><b>Duración:</b> ${duracion} días`,
+                background: '#0D111A',
+                color: '#f3f4f6',
+                confirmButtonColor: '#2563eb'
+            });
+        } else {
+            alert(`Detalle del Servicio #${id}\n\nNombre: ${nombre}\nPrecio: $${precio}\nDuración: ${duracion} días`);
+        }
+    }
+
+    function prepararEditarServicio(id, nombre, precio, duracion) {
+        document.getElementById('servicioId').value = id;
+        document.getElementById('nuevoNombre').value = nombre;
+        document.getElementById('nuevoPrecio').value = precio;
+        document.getElementById('nuevaDuracion').value = duracion;
+        
+        const submitBtn = document.getElementById('btnSubmitServicio');
+        const tituloSeccion = document.getElementById('formTituloSeccion');
+        
+        if (submitBtn) {
+            submitBtn.innerText = 'Actualizar Servicio';
+            submitBtn.className = "bg-amber-600 hover:bg-amber-500 text-white font-medium px-4 py-2.5 rounded-xl text-sm cursor-pointer transition-all shadow-lg shadow-amber-600/20";
+        }
+        
+        if (tituloSeccion) {
+            tituloSeccion.innerHTML = `<i class="fa-solid fa-pen-to-square"></i> Editando Servicio #${id}`;
+        }
+
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+
+        if (typeof Swal !== 'undefined') {
+            Swal.fire({
+                icon: 'info',
+                title: 'Modo Edición Activado',
+                text: `Editando el servicio: "${nombre}". Modifica los datos y guarda los cambios.`,
+                confirmButtonColor: '#d97706',
+                background: '#0D111A',
+                color: '#f3f4f6',
+                timer: 2500,
+                timerProgressBar: true
+            });
+        }
+    }
+
+    async function eliminarServicio(id) {
+        let confirmar = false;
+
+        if (typeof Swal !== 'undefined') {
+            const result = await Swal.fire({
+                title: '¿Estás seguro?',
+                text: "Esta acción dará de baja el servicio seleccionado en la base de datos.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#e11d48',
+                cancelButtonColor: '#475569',
+                confirmButtonText: 'Sí, eliminar',
+                cancelButtonText: 'Cancelar',
+                background: '#0D111A',
+                color: '#f3f4f6'
+            });
+            confirmar = result.isConfirmed;
+        } else {
+            confirmar = confirm('¿Estás seguro de que deseas desactivar este servicio?');
+        }
+
+        if (!confirmar) return[cite: 10];
+
+        try {
+            const response = await fetch(`/admin/servicios/${id}`, { method: 'DELETE' });
+            
+            if (response.ok) {
+                if (typeof Swal !== 'undefined') {
+                    await Swal.fire({
+                        icon: 'success',
+                        title: 'Eliminado',
+                        text: 'Servicio dado de baja con éxito en MySQL.',
+                        timer: 1500,
+                        showConfirmButton: false,
+                        background: '#0D111A',
+                        color: '#f3f4f6'
+                    });
+                } else {
+                    alert('Servicio dado de baja con éxito.');
+                }
+                cargarServiciosDesdeBD(); 
+            } else {
+                throw new Error('No se pudo eliminar el servicio en el servidor.');
+            }
+        } catch (error) {
+            console.error("Error al eliminar:", error);
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({ icon: 'error', title: 'Error', text: error.message, background: '#0D111A', color: '#f3f4f6' });
+            } else {
+                alert('Error: ' + error.message);
+            }
+        }
+    }
+
+    function configurarFormularioServicio() {
+        const form = document.getElementById('formNuevoServicio');
+        
+        if (form) {
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+
+                const submitBtn = document.getElementById('btnSubmitServicio');
+                const servicioId = document.getElementById('servicioId').value;
+
+                if (submitBtn) {
+                    submitBtn.disabled = true;
+                    submitBtn.innerText = servicioId ? 'Actualizando...' : 'Guardando...';
+                }
+
+                const formData = new FormData();
+                formData.append('nombre', document.getElementById('nuevoNombre').value);
+                formData.append('precio', document.getElementById('nuevoPrecio').value);
+                formData.append('duracion', document.getElementById('nuevaDuracion').value);
+                
+                const archivoInput = document.getElementById('imagenServicio');
+                if (archivoInput && archivoInput.files[0]) {
+                    formData.append('imagen', archivoInput.files[0]);
+                }
+
+                const url = servicioId ? `/admin/servicios/${servicioId}` : '/admin/servicios';
+                const method = servicioId ? 'PUT' : 'POST';
+
+                try {
+                    const response = await fetch(url, {
+                        method: method,
+                        body: formData
+                    });
+
+                    const result = await response.json();
+
+                    if (response.ok) {
+                        form.reset();
+                        document.getElementById('servicioId').value = '';
+                        
+                        // Restaurar título y botón a estado normal (Registrar)
+                        const tituloSeccion = document.getElementById('formTituloSeccion');
+                        if (tituloSeccion) {
+                            tituloSeccion.innerHTML = `<i class="fa-solid fa-circle-plus"></i> Registrar Nuevo Servicio`;
+                        }
+                        if (submitBtn) {
+                            submitBtn.innerText = 'Guardar Servicio';
+                            submitBtn.className = "bg-blue-600 hover:bg-blue-500 text-white font-medium px-4 py-2.5 rounded-xl text-sm cursor-pointer transition-all";
+                        }
+                        
+                        if (typeof Swal !== 'undefined') {
+                            await Swal.fire({
+                                icon: 'success',
+                                title: '¡Éxito!',
+                                text: result.message || 'Operación realizada correctamente.',
+                                confirmButtonColor: '#2563eb',
+                                background: '#0D111A',
+                                color: '#f3f4f6',
+                                timer: 1500,
+                                showConfirmButton: false
+                            });
+                        } else {
+                            alert('¡Éxito! Operación realizada correctamente.');
+                        }
+                        
+                        cargarServiciosDesdeBD();
+
+                    } else {
+                        throw new Error(result.error || 'No se pudo completar la operación.');
+                    }
+                } catch (error) {
+                    console.error('Error durante el envío:', error);
+                    if (typeof Swal !== 'undefined') {
+                        Swal.fire({ icon: 'error', title: 'Atención', text: error.message, background: '#0D111A', color: '#f3f4f6' });
+                    } else {
+                        alert('Error: ' + error.message);
+                    }
+                } finally {
+                    if (submitBtn) {
+                        submitBtn.disabled = false;
+                        const currentId = document.getElementById('servicioId').value;
+                        if (!currentId) {
+                            submitBtn.innerText = 'Guardar Servicio';
+                            submitBtn.className = "bg-blue-600 hover:bg-blue-500 text-white font-medium px-4 py-2.5 rounded-xl text-sm cursor-pointer transition-all";
+                        } else {
+                            submitBtn.innerText = 'Actualizar Servicio';
+                            submitBtn.className = "bg-amber-600 hover:bg-amber-500 text-white font-medium px-4 py-2.5 rounded-xl text-sm cursor-pointer transition-all shadow-lg shadow-amber-600/20";
+                        }
+                    }
+                }
+            });
+        }
+    }
+</script>
+```[cite: 12]
