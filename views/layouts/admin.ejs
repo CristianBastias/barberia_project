@@ -45,17 +45,26 @@
 </head>
 <body class="bg-[#0b0f19] text-slate-100 flex h-screen overflow-hidden m-0 p-0">
 
-    <!-- 1. BARRA VERTICAL IZQUIERDA (SIDEBAR MODERNIZADA) -->
-    <aside class="w-72 bg-[#0D111A]/95 backdrop-blur-xl border-r border-[#1E2638] flex flex-col z-50 shrink-0 hidden md:flex shadow-2xl">
+    <!-- OVERLAY OSCURO PARA MÓVIL CUANDO EL SIDEBAR ESTÁ ABIERTO -->
+    <div id="sidebarOverlay" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 hidden md:hidden transition-opacity duration-300"></div>
+
+    <!-- 1. BARRA VERTICAL IZQUIERDA (SIDEBAR MODERNIZADA Y RESPONSIVA) -->
+    <aside id="appSidebar" class="fixed md:static inset-y-0 left-0 w-72 bg-[#0D111A]/95 backdrop-blur-xl border-r border-[#1E2638] flex flex-col z-50 shadow-2xl transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out">
         <!-- Logo y Título de Marca -->
-        <div class="p-6 border-b border-[#1E2638] flex items-center gap-3.5">
-            <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-blue-500/20 to-indigo-500/20 border border-blue-500/40 flex items-center justify-center overflow-hidden p-1.5 shadow-[0_0_15px_rgba(59,130,246,0.15)]">
-                <img src="/img/buho.png" alt="Logo Búho" class="w-full h-full object-contain">
+        <div class="p-6 border-b border-[#1E2638] flex items-center justify-between">
+            <div class="flex items-center gap-3.5">
+                <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-blue-500/20 to-indigo-500/20 border border-blue-500/40 flex items-center justify-center overflow-hidden p-1.5 shadow-[0_0_15px_rgba(59,130,246,0.15)]">
+                    <img src="/img/buho.png" alt="Logo Búho" class="w-full h-full object-contain">
+                </div>
+                <div>
+                    <span class="text-lg font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-400 to-pink-500 tracking-wider">BÚHO</span>
+                    <span class="block text-[10px] uppercase tracking-widest text-slate-400 font-bold">Management Hub</span>
+                </div>
             </div>
-            <div>
-                <span class="text-lg font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-400 to-pink-500 tracking-wider">BÚHO</span>
-                <span class="block text-[10px] uppercase tracking-widest text-slate-400 font-bold">Management Hub</span>
-            </div>
+            <!-- Botón para cerrar sidebar en móvil -->
+            <button id="cerrarSidebar" class="md:hidden text-slate-400 hover:text-white p-2">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
         </div>
 
         <!-- Módulos de Enlaces Modernos -->
@@ -115,20 +124,18 @@
             </a>
 
             <a href="/admin/mail" class="flex items-center justify-between px-4 py-3.5 rounded-2xl text-sm font-semibold text-slate-200 hover:bg-gradient-to-r hover:from-blue-600/15 hover:to-indigo-600/5 hover:text-blue-400 transition-all group border border-transparent hover:border-blue-500/30 shadow-sm text-decoration-none relative">
-    <div class="flex items-center gap-3">
-        <div class="w-9 h-9 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-400 group-hover:text-blue-400 group-hover:border-blue-500/40 transition-all shadow-inner">
-            <i class="fa-solid fa-envelope text-sm"></i>
-        </div>
-        <div class="relative flex items-center">
-            <span>Gestión de Mail</span>
-            <!-- ID obligatorio para que el JS pueda actualizar y reducir el número -->
-            <span id="badgeMailCount" class="hidden ml-2 px-1.5 py-0.5 text-[10px] font-bold bg-rose-500 text-white rounded-full shadow-lg animate-pulse">0</span>
-        </div>
-    </div>
-    <i class="fa-solid fa-chevron-right text-[10px] text-slate-600 group-hover:text-blue-400 transition-transform group-hover:translate-x-0.5"></i>
-</a>
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-400 group-hover:text-blue-400 group-hover:border-blue-500/40 transition-all shadow-inner">
+                        <i class="fa-solid fa-envelope text-sm"></i>
+                    </div>
+                    <div class="relative flex items-center">
+                        <span>Gestión de Mail</span>
+                        <span id="badgeMailCount" class="hidden ml-2 px-1.5 py-0.5 text-[10px] font-bold bg-rose-500 text-white rounded-full shadow-lg animate-pulse">0</span>
+                    </div>
+                </div>
+                <i class="fa-solid fa-chevron-right text-[10px] text-slate-600 group-hover:text-blue-400 transition-transform group-hover:translate-x-0.5"></i>
+            </a>
         </nav>
-   
     </aside>
 
     <!-- 2. CONTENEDOR DERECHO (Navbar superior, Contenido y Footer) -->
@@ -137,6 +144,11 @@
         <!-- BARRA SUPERIOR / NAVBAR HORIZONTAL RESPONSIVA -->
         <header class="w-full bg-[#0D111A]/90 backdrop-blur-xl border-b border-[#1E2638] sticky top-0 z-40 px-4 sm:px-6 py-3.5 flex items-center justify-between shadow-lg">
             <div class="flex items-center gap-3">
+                <!-- Botón Hamburguesa para abrir el menú móvil -->
+                <button id="abrirSidebar" class="md:hidden text-slate-300 hover:text-white bg-slate-900/80 border border-slate-800 p-2.5 rounded-xl transition-all shadow-sm">
+                    <i class="fa-solid fa-bars text-base"></i>
+                </button>
+
                 <a href="/admin" class="flex items-center gap-2.5 group md:hidden text-decoration-none">
                     <div class="w-9 h-9 rounded-xl bg-blue-500/10 border border-blue-500/30 flex items-center justify-center p-1">
                         <img src="/img/buho.png" alt="Logo Búho" class="w-full h-full object-contain">
@@ -169,5 +181,22 @@
             <p>Barbería Búho &copy; <%= new Date().getFullYear() %> — Todos los derechos reservados.</p>
         </footer>
     </div>
+
+    <!-- Script del Menú Hamburguesa Móvil -->
+    <script>
+        const abrirSidebar = document.getElementById('abrirSidebar');
+        const cerrarSidebar = document.getElementById('cerrarSidebar');
+        const appSidebar = document.getElementById('appSidebar');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+        function toggleSidebar() {
+            appSidebar.classList.toggle('-translate-x-full');
+            sidebarOverlay.classList.toggle('hidden');
+        }
+
+        if (abrirSidebar) abrirSidebar.addEventListener('click', toggleSidebar);
+        if (cerrarSidebar) cerrarSidebar.addEventListener('click', toggleSidebar);
+        if (sidebarOverlay) sidebarOverlay.addEventListener('click', toggleSidebar);
+    </script>
 </body>
 </html>

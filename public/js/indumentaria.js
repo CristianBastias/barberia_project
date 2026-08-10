@@ -96,13 +96,13 @@ function renderizarTablaAdmin(productos) {
         <td class="py-3.5 px-4 text-slate-300 text-sm">${item.stock} u.</td>
         <td class="py-3.5 px-4">${estadoBadge}</td>
         <td class="py-3.5 px-4 text-right whitespace-nowrap space-x-1.5">
-            <button type="button" onclick="editarPrenda(${item.id}, '${item.nombre.replace(/'/g, "\\'")}', ${item.precio}, ${item.stock}, \`${item.descripcion || ''}\`)" class="p-1.5 bg-amber-600/20 hover:bg-amber-600 text-amber-400 hover:text-white rounded-lg text-xs transition-all border border-amber-500/30 cursor-pointer inline-flex items-center justify-center" title="Editar">
+            <button onclick="editarPrenda(${item.id}, '${item.nombre.replace(/'/g, "\\'")}', ${item.precio}, ${item.stock}, \`${item.descripcion || ''}\`)" class="p-1.5 bg-amber-600/20 hover:bg-amber-600 text-amber-400 hover:text-white rounded-lg text-xs transition-all border border-amber-500/30 cursor-pointer inline-flex items-center justify-center" title="Editar">
                 <i class="fa-solid fa-pen text-xs"></i>
             </button>
-            <button type="button" onclick="cambiarEstadoPrenda(${item.id})" class="p-1.5 bg-blue-600/20 hover:bg-blue-600 text-blue-400 hover:text-white rounded-lg text-xs transition-all border border-blue-500/30 cursor-pointer inline-flex items-center justify-center" title="Cambiar Estado">
+            <button onclick="cambiarEstadoPrenda(${item.id})" class="p-1.5 bg-blue-600/20 hover:bg-blue-600 text-blue-400 hover:text-white rounded-lg text-xs transition-all border border-blue-500/30 cursor-pointer inline-flex items-center justify-center" title="Cambiar Estado">
                 <i class="fa-solid fa-eye-slash text-xs"></i>
             </button>
-            <button type="button" onclick="eliminarPrenda(${item.id})" class="p-1.5 bg-red-600/20 hover:bg-red-600 text-red-400 hover:text-white rounded-lg text-xs transition-all border border-red-500/30 cursor-pointer inline-flex items-center justify-center" title="Eliminar">
+            <button onclick="eliminarPrenda(${item.id})" class="p-1.5 bg-red-600/20 hover:bg-red-600 text-red-400 hover:text-white rounded-lg text-xs transition-all border border-red-500/30 cursor-pointer inline-flex items-center justify-center" title="Eliminar">
                 <i class="fa-solid fa-trash text-xs"></i>
             </button>
         </td>
@@ -112,6 +112,16 @@ function renderizarTablaAdmin(productos) {
 }
 
 // Funciones auxiliares de control para los botones de la tabla
+function resetearFormularioProducto() {
+    const form = document.getElementById('formIndumentaria');
+    if (form) form.reset();
+    document.getElementById('productoIdEdit').value = '';
+    document.getElementById('formTituloProducto').innerHTML = '<i class="fa-solid fa-circle-plus"></i> Registrar Nueva Prenda';
+    document.getElementById('btnSubmitProducto').textContent = 'Guardar Prenda';
+    const btnCancelar = document.getElementById('btnCancelarEdicionProducto');
+    if (btnCancelar) btnCancelar.classList.add('hidden');
+}
+
 function editarPrenda(id, nombre, precio, stock, descripcion) {
     document.getElementById('productoIdEdit').value = id;
     document.getElementById('nombreProducto').value = nombre;
@@ -119,66 +129,19 @@ function editarPrenda(id, nombre, precio, stock, descripcion) {
     document.getElementById('stockProducto').value = stock;
     document.getElementById('descripcionProducto').value = descripcion;
     
-    // Cambios visuales evidentes (Borde naranja y fondo sutil) inspirados en la sección de barberos
-    const cardForm = document.getElementById('formIndumentaria').closest('div');
-    if (cardForm) {
-        cardForm.classList.remove('border-slate-800/80');
-        cardForm.classList.add('border-amber-500/50', 'bg-amber-950/10');
-    }
-
-    const btnSubmit = document.getElementById('btnSubmitProducto');
-    if (btnSubmit) {
-        btnSubmit.innerText = 'Actualizar Prenda';
-        btnSubmit.className = "w-full bg-amber-600 hover:bg-amber-500 text-white font-medium py-3 px-6 rounded-xl text-sm transition-all shadow-md cursor-pointer flex items-center justify-center gap-2";
-    }
-
-    const titulo = document.getElementById('formTituloProducto');
-    if (titulo) {
-        titulo.className = "text-sm font-semibold text-amber-400 uppercase tracking-wider flex items-center gap-2";
-        titulo.innerHTML = `<i class="fa-solid fa-pen-to-square"></i> Editando Prenda ID #${id} (Modo Edición Activo)`;
-    }
-
-    const btnCancelar = document.getElementById('btnCancelarEdicionProducto');
-    if (btnCancelar) btnCancelar.classList.remove('hidden');
-
+    document.getElementById('formTituloProducto').innerHTML = '<i class="fa-solid fa-pen-to-square"></i> Editar Prenda';
+    document.getElementById('btnSubmitProducto').textContent = 'Actualizar Prenda';
+    document.getElementById('btnCancelarEdicionProducto').classList.remove('hidden');
     window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-function resetearFormularioProducto() {
-    const form = document.getElementById('formIndumentaria');
-    if (form) form.reset();
-    document.getElementById('productoIdEdit').value = '';
-
-    const cardForm = document.getElementById('formIndumentaria').closest('div');
-    if (cardForm) {
-        cardForm.classList.add('border-slate-800/80');
-        cardForm.classList.remove('border-amber-500/50', 'bg-amber-950/10');
-    }
-
-    const btnSubmit = document.getElementById('btnSubmitProducto');
-    if (btnSubmit) {
-        btnSubmit.innerText = 'Guardar Prenda';
-        btnSubmit.className = "w-full bg-gradient-to-r from-blue-600 to-pink-600 hover:from-blue-500 hover:to-pink-500 text-white font-medium py-3 px-6 rounded-xl text-sm transition-all shadow-lg shadow-blue-600/30 cursor-pointer flex items-center justify-center gap-2";
-    }
-
-    const titulo = document.getElementById('formTituloProducto');
-    if (titulo) {
-        titulo.className = "text-sm font-semibold text-blue-400 uppercase tracking-wider flex items-center gap-2";
-        titulo.innerHTML = `<i class="fa-solid fa-circle-plus"></i> Registrar Nueva Prenda`;
-    }
-
-    const btnCancelar = document.getElementById('btnCancelarEdicionProducto');
-    if (btnCancelar) btnCancelar.classList.add('hidden');
 }
 
 async function cambiarEstadoPrenda(id) {
     try {
         const response = await fetch(`/api/indumentaria/${id}/estado`, { method: 'PATCH' });
-        const data = await response.json().catch(() => ({}));
         if (response.ok) {
             cargarIndumentaria();
         } else {
-            alert(data.error || 'Error al cambiar el estado de la prenda');
+            alert('Error al cambiar el estado de la prenda');
         }
     } catch (error) {
         console.error("Error:", error);
@@ -189,11 +152,10 @@ async function eliminarPrenda(id) {
     if (!confirm('¿Estás seguro de eliminar esta prenda permanentemente?')) return;
     try {
         const response = await fetch(`/api/indumentaria/${id}`, { method: 'DELETE' });
-        const data = await response.json().catch(() => ({}));
         if (response.ok) {
             cargarIndumentaria();
         } else {
-            alert(data.error || 'Error al eliminar la prenda');
+            alert('Error al eliminar la prenda');
         }
     } catch (error) {
         console.error("Error:", error);

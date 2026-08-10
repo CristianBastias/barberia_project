@@ -32,14 +32,15 @@ async function cargarServicios() {
                 : `<span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-rose-500/10 text-rose-400 border border-rose-500/20 shadow-sm">Inactivo</span>`;
 
             const precioFormateado = Number(s.precio).toLocaleString('es-AR', { maximumFractionDigits: 0 });
+            const duracionValor = s.duracion_minutos || s.duracion || '';
 
             tr.innerHTML = `
                 <td class="py-4 px-4 font-mono text-xs text-slate-400">#${s.id}</td>
                 <td class="py-4 px-4 text-white font-medium">${s.nombre} <div class="mt-1">${estadoBadge}</div></td>
                 <td class="py-4 px-4 font-mono text-emerald-400 font-semibold">$${precioFormateado}</td>
-                <td class="py-4 px-4 text-slate-400 text-xs">${s.duracion_minutos || s.duracion ? (s.duracion_minutos || s.duracion) + ' mins' : 'N/D'}</td>
+                <td class="py-4 px-4 text-slate-400 text-xs">${duracionValor ? duracionValor + ' mins' : 'N/D'}</td>
                 <td class="py-4 px-4 text-right whitespace-nowrap space-x-2">
-                    <button type="button" onclick="prepararEditarServicio(${s.id}, '${s.nombre.replace(/'/g, "\\'")}', ${s.precio}, '${s.duracion_minutos || s.duracion || ''}')" class="bg-slate-950 hover:bg-amber-600/20 text-amber-400 border border-slate-800 hover:border-amber-500/30 p-2 rounded-xl transition-all shadow-sm cursor-pointer" title="Editar Servicio">
+                    <button type="button" onclick="prepararEditarServicio(${s.id}, '${s.nombre.replace(/'/g, "\\'")}', ${s.precio}, '${duracionValor}')" class="bg-slate-950 hover:bg-amber-600/20 text-amber-400 border border-slate-800 hover:border-amber-500/30 p-2 rounded-xl transition-all shadow-sm cursor-pointer" title="Editar Servicio">
                         <i class="fa-solid fa-pen-to-square text-xs"></i>
                     </button>
                     <button type="button" onclick="eliminarServicio(${s.id})" class="bg-slate-950 hover:bg-rose-600/20 text-rose-400 border border-slate-800 hover:border-rose-500/30 p-2 rounded-xl transition-all shadow-sm cursor-pointer" title="Eliminar / Desactivar">
@@ -82,9 +83,9 @@ async function guardarServicio(e) {
 
         if (!response.ok) throw new Error('No se pudo procesar la solicitud');
 
+        alert(id ? '¡Servicio actualizado con éxito!' : '¡Servicio registrado con éxito!');
         resetearFormularioServicio();
         cargarServicios();
-        alert(id ? '¡Servicio actualizado con éxito!' : '¡Servicio registrado con éxito!');
     } catch (error) {
         console.error('Error:', error);
         alert('Hubo un error al guardar el servicio.');
@@ -94,11 +95,11 @@ async function guardarServicio(e) {
 function prepararEditarServicio(id, nombre, precio, duracion) {
     let inputId = document.getElementById('servicioIdEdit');
     if (!inputId) {
-        // Creamos el campo oculto si no existe en el DOM
         inputId = document.createElement('input');
         inputId.type = 'hidden';
         inputId.id = 'servicioIdEdit';
-        document.getElementById('formServicio').appendChild(inputId);
+        const form = document.getElementById('formServicio');
+        if (form) form.appendChild(inputId);
     }
     inputId.value = id;
 
@@ -107,7 +108,7 @@ function prepararEditarServicio(id, nombre, precio, duracion) {
     const inputDuracion = document.getElementById('duracionServicio');
     if (inputDuracion) inputDuracion.value = duracion;
 
-    // Cambios visuales en el contenedor del formulario (ESTILO NARANJA / ÁMBAR)
+    // Cambios visuales: Borde naranja y fondo sutil de edición
     const cardForm = document.getElementById('formServicio').closest('div');
     if (cardForm) {
         cardForm.classList.remove('border-slate-800/80');
