@@ -81,7 +81,7 @@ function verDetalleServicio(id, nombre, precio, duracion) {
     }
 }
 
-// Expuesto globalmente para que el onclick del HTML lo encuentre sin problemas
+// Expuesto globalmente y adaptado con efecto ámbar/naranja idéntico al de indumentaria
 window.prepararEditarServicio = function(id, nombre, precio, duracion) {
     const inputId = document.getElementById('servicioId');
     const inputNombre = document.getElementById('nuevoNombre');
@@ -96,7 +96,7 @@ window.prepararEditarServicio = function(id, nombre, precio, duracion) {
     const submitBtn = document.querySelector('#formNuevoServicio button[type="submit"]');
     if (submitBtn) {
         submitBtn.innerText = 'Actualizar Servicio';
-        submitBtn.className = "bg-amber-600 hover:bg-amber-500 text-white font-medium px-4 py-2.5 rounded-xl text-sm cursor-pointer transition-all";
+        submitBtn.className = "bg-amber-600 hover:bg-amber-500 text-white font-medium px-4 py-2.5 rounded-xl text-sm cursor-pointer transition-all shadow-lg shadow-amber-600/20";
     }
 
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -221,8 +221,13 @@ function configurarFormularioServicio() {
             } finally {
                 if (submitBtn) {
                     submitBtn.disabled = false;
+                    // Restablece el texto según corresponda si hubo fallo
                     if (!document.getElementById('servicioId').value) {
                         submitBtn.innerText = 'Guardar Servicio';
+                        submitBtn.className = "bg-blue-600 hover:bg-blue-500 text-white font-medium px-4 py-2.5 rounded-xl text-sm cursor-pointer transition-all";
+                    } else {
+                        submitBtn.innerText = 'Actualizar Servicio';
+                        submitBtn.className = "bg-amber-600 hover:bg-amber-500 text-white font-medium px-4 py-2.5 rounded-xl text-sm cursor-pointer transition-all shadow-lg shadow-amber-600/20";
                     }
                 }
             }
