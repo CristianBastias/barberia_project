@@ -19,7 +19,10 @@
     </div>
     
     <!-- El <form> envuelve todo el contenido interactivo y el botón -->
-    <form id="formNuevoServicio" class="space-y-4" onsubmit="guardarServicio(event)">
+    <form id="formNuevoServicio" class="space-y-4">
+        <!-- Campo oculto para saber si estamos editando -->
+        <input type="hidden" id="servicioId" value="">
+
         <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
             <div>
                 <label for="nuevoNombre" class="block text-xs font-medium text-slate-300 mb-1.5">Nombre del Servicio *</label>
@@ -27,7 +30,7 @@
             </div>
             <div>
                 <label for="nuevoPrecio" class="block text-xs font-medium text-slate-300 mb-1.5">Precio ($) *</label>
-                <input type="number" step="0.01" class="w-full bg-slate-950/80 border border-slate-800 text-slate-100 px-3.5 py-2.5 rounded-xl text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all placeholder:text-slate-600" id="nuevoPrecio" required placeholder="Ej: 5000">
+                <input type="number" step="1" class="w-full bg-slate-950/80 border border-slate-800 text-slate-100 px-3.5 py-2.5 rounded-xl text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all placeholder:text-slate-600" id="nuevoPrecio" required placeholder="Ej: 5000">
             </div>
             <div>
                 <label for="nuevaDuracion" class="block text-xs font-medium text-slate-300 mb-1.5">Duración (días) *</label>
@@ -44,7 +47,7 @@
 
         <!-- Botón dentro del form que ejecuta la acción de guardar -->
         <div class="flex justify-end gap-3 mt-4">
-           <button type="submit" class="bg-blue-600 hover:bg-blue-500 text-white font-medium px-4 py-2.5  rounded-xl text-sm">
+           <button type="submit" class="bg-blue-600 hover:bg-blue-500 text-white font-medium px-4 py-2.5 rounded-xl text-sm cursor-pointer transition-all">
             Guardar Servicio
         </button>
     </div>
@@ -89,6 +92,7 @@
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         cargarServiciosDesdeBD();
+        configurarFormularioServicio();
     });
 
     async function cargarServiciosDesdeBD() {
@@ -127,18 +131,21 @@
                 ? `<span class="text-xs text-slate-400 font-mono bg-slate-950 px-2 py-1 rounded-md border border-slate-800">${serv.imagen_url}</span>` 
                 : `<span class="text-xs text-slate-600 italic">Sin imagen</span>`;
 
+            // PRECIO SIN DECIMALES USANDO maximumFractionDigits: 0
+            const precioFormateado = Number(serv.precio).toLocaleString('es-AR', { maximumFractionDigits: 0 });
+
             tr.innerHTML = `
                 <td class="py-4 px-6 font-mono text-slate-400 text-xs font-medium">#${serv.id}</td>
                 <td class="py-4 px-6">${imgHtml}</td>
                 <td class="py-4 px-6 font-medium text-slate-200">${serv.nombre}</td>
-                <td class="py-4 px-6 text-emerald-400 font-semibold">$${Number(serv.precio).toLocaleString()}</td>
+                <td class="py-4 px-6 text-emerald-400 font-semibold">$${precioFormateado}</td>
                 <td class="py-4 px-6 text-slate-300">${serv.duracion} dias</td>
                 <td class="py-4 px-6">${estadoBadge}</td>
                 <td class="py-4 px-6 text-right whitespace-nowrap space-x-2">
-                    <button type="button" onclick="verDetalleServicio(${serv.id}, '${serv.nombre}', ${serv.precio}, ${serv.duracion})" class="bg-slate-950 hover:bg-blue-600/20 text-blue-400 border border-slate-800 hover:border-blue-500/30 p-2 rounded-xl transition-all shadow-sm cursor-pointer" title="Ver Detalles">
+                    <button type="button" onclick="verDetalleServicio(${serv.id}, '${serv.nombre}', '${precioFormateado}', ${serv.duracion})" class="bg-slate-950 hover:bg-blue-600/20 text-blue-400 border border-slate-800 hover:border-blue-500/30 p-2 rounded-xl transition-all shadow-sm cursor-pointer" title="Ver Detalles">
                         <i class="fa-solid fa-eye text-xs"></i>
                     </button>
-                    <button type="button" onclick="prepararEditarServicio(${serv.id}, '${serv.nombre}', ${serv.precio}, ${serv.duracion}, '${serv.imagen_url || ''}')" class="bg-slate-950 hover:bg-amber-600/20 text-amber-400 border border-slate-800 hover:border-amber-500/30 p-2 rounded-xl transition-all shadow-sm cursor-pointer" title="Editar Servicio">
+                    <button type="button" onclick="prepararEditarServicio(${serv.id}, '${serv.nombre}', ${serv.precio}, ${serv.duracion})" class="bg-slate-950 hover:bg-amber-600/20 text-amber-400 border border-slate-800 hover:border-amber-500/30 p-2 rounded-xl transition-all shadow-sm cursor-pointer" title="Editar Servicio">
                         <i class="fa-solid fa-pen-to-square text-xs"></i>
                     </button>
                     <button type="button" onclick="eliminarServicio(${serv.id})" class="bg-slate-950 hover:bg-rose-600/20 text-rose-400 border border-slate-800 hover:border-rose-500/30 p-2 rounded-xl transition-all shadow-sm cursor-pointer" title="Eliminar / Desactivar">
@@ -152,143 +159,172 @@
         document.getElementById('total-servicios').innerText = `${servicios.length} servicios`;
     }
 
-    
     function verDetalleServicio(id, nombre, precio, duracion) {
-        alert(`Detalle del Servicio #${id}\n\nNombre: ${nombre}\nPrecio: $${precio}\nDuración: ${duracion} minutos`);
+        if (typeof Swal !== 'undefined') {
+            Swal.fire({
+                icon: 'info',
+                title: `Servicio #${id}`,
+                html: `<b>Nombre:</b> ${nombre}<br><b>Precio:</b> $${precio}<br><b>Duración:</b> ${duracion} días`,
+                background: '#0D111A',
+                color: '#f3f4f6',
+                confirmButtonColor: '#2563eb'
+            });
+        } else {
+            alert(`Detalle del Servicio #${id}\n\nNombre: ${nombre}\nPrecio: $${precio}\nDuración: ${duracion} días`);
+        }
     }
 
-    async function prepararEditarServicio(id, nombre, precio, duracion, imagen) {
-    document.getElementById('nuevoNombre').value = nombre;
-    document.getElementById('nuevoPrecio').value = precio;
-    document.getElementById('nuevaDuracion').value = duracion;
-    
-    const imagenInput = document.getElementById('nuevaImagen');
-    if (imagenInput) {
-        imagenInput.value = imagen !== 'null' && imagen ? imagen : '';
-    }
-    
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    function prepararEditarServicio(id, nombre, precio, duracion) {
+        document.getElementById('servicioId').value = id;
+        document.getElementById('nuevoNombre').value = nombre;
+        document.getElementById('nuevoPrecio').value = precio;
+        document.getElementById('nuevaDuracion').value = duracion;
+        
+        window.scrollTo({ top: 0, behavior: 'smooth' });
 
-    // Reemplazamos la alerta nativa por SweetAlert con tu diseño personalizado
-    if (typeof Swal !== 'undefined') {
-        await Swal.fire({
-            icon: 'info',
-            title: 'Modo Edición Activado',
-            text: `Editando el servicio: "${nombre}". Modifica los datos en el formulario y guarda los cambios.`,
-            confirmButtonColor: '#2563eb',
-            background: '#0D111A',
-            color: '#f3f4f6',
-            timer: 3000,
-            timerProgressBar: true,
-            showConfirmButton: true
-        });
-    } else {
-        // Respaldo por si acaso
-        alert(`Modo Edición activado para el servicio #${id}. Modifica los datos arriba.`);
+        if (typeof Swal !== 'undefined') {
+            Swal.fire({
+                icon: 'info',
+                title: 'Modo Edición Activado',
+                text: `Editando el servicio: "${nombre}". Modifica los datos en el formulario y guarda los cambios.`,
+                confirmButtonColor: '#2563eb',
+                background: '#0D111A',
+                color: '#f3f4f6',
+                timer: 3000,
+                timerProgressBar: true
+            });
+        }
     }
-   }
 
     async function eliminarServicio(id) {
-        if (!confirm('¿Estás seguro de que deseas desactivar este servicio?')) return;
+        let confirmar = false;
+
+        if (typeof Swal !== 'undefined') {
+            const result = await Swal.fire({
+                title: '¿Estás seguro?',
+                text: "Esta acción dará de baja el servicio seleccionado.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#e11d48',
+                cancelButtonColor: '#475569',
+                confirmButtonText: 'Sí, eliminar',
+                cancelButtonText: 'Cancelar',
+                background: '#0D111A',
+                color: '#f3f4f6'
+            });
+            confirmar = result.isConfirmed;
+        } else {
+            confirmar = confirm('¿Estás seguro de que deseas desactivar este servicio?');
+        }
+
+        if (!confirmar) return;
 
         try {
             const response = await fetch(`/admin/servicios/${id}`, { method: 'DELETE' });
             
             if (response.ok) {
-                alert('Servicio dado de baja con éxito.');
-                cargarServiciosDesdeBD(); 
-            } else {
-                alert('No se pudo eliminar el servicio.');
-            }
-        } catch (error) {
-            console.error("Error al eliminar:", error);
-            alert('Error de conexión al intentar eliminar el servicio.');
-        }
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-    const form = document.getElementById('formNuevoServicio');
-    
-    if (form) {
-        form.addEventListener('submit', async function(e) {
-            e.preventDefault();
-
-            // Bloquear el botón para evitar envíos dobles
-            const submitBtn = form.querySelector('button[type="submit"]');
-            if (submitBtn) {
-                submitBtn.disabled = true;
-                submitBtn.innerText = 'Guardando...';
-            }
-
-            const formData = new FormData();
-            formData.append('nombre', document.getElementById('nuevoNombre').value);
-            formData.append('precio', document.getElementById('nuevoPrecio').value);
-            formData.append('duracion', document.getElementById('nuevaDuracion').value);
-            
-            const archivoInput = document.getElementById('imagenServicio');
-            if (archivoInput && archivoInput.files[0]) {
-                formData.append('imagen', archivoInput.files[0]);
-            }
-
-            const servicioId = document.getElementById('servicioId')?.value;
-            const url = servicioId ? `/admin/servicios/${servicioId}` : '/admin/servicios';
-            const method = servicioId ? 'PUT' : 'POST';
-
-            try {
-                const response = await fetch(url, {
-                    method: method,
-                    body: formData
-                });
-
-                const result = await response.json();
-
-                if (response.ok) {
-                    form.reset();
-                    
-                    // Verificamos si SweetAlert está disponible. Si no, usamos la alerta nativa.
-                    if (typeof Swal !== 'undefined') {
-                        await Swal.fire({
-                            icon: 'success',
-                            title: '¡Éxito!',
-                            text: result.message || 'Servicio guardado correctamente.',
-                            confirmButtonColor: '#2563eb',
-                            background: '#0D111A',
-                            color: '#f3f4f6',
-                            allowOutsideClick: false
-                        });
-                    } else {
-                        // RESPALDO NATIVO: Si SweetAlert falla, esta alerta siempre aparecerá.
-                        alert('¡Éxito! Servicio guardado correctamente.');
-                    }
-                    
-                    // La recarga ocurre independientemente del método de alerta
-                    location.reload();
-
-                } else {
-                    throw new Error(result.error || 'No se pudo guardar el servicio.');
-                }
-            } catch (error) {
-                console.error('Error durante el guardado:', error);
-                
-                if (submitBtn) {
-                    submitBtn.disabled = false;
-                    submitBtn.innerText = 'Guardar Servicio';
-                }
-
                 if (typeof Swal !== 'undefined') {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Atención',
-                        text: error.message,
-                        confirmButtonColor: '#2563eb',
+                    await Swal.fire({
+                        icon: 'success',
+                        title: 'Eliminado',
+                        text: 'Servicio dado de baja con éxito.',
+                        timer: 1500,
+                        showConfirmButton: false,
                         background: '#0D111A',
                         color: '#f3f4f6'
                     });
                 } else {
-                    alert('Error: ' + error.message);
+                    alert('Servicio dado de baja con éxito.');
                 }
+                // Recargamos la tabla dinámicamente sin refrescar toda la página
+                cargarServiciosDesdeBD(); 
+            } else {
+                throw new Error('No se pudo eliminar el servicio.');
             }
-        });
+        } catch (error) {
+            console.error("Error al eliminar:", error);
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({ icon: 'error', title: 'Error', text: error.message, background: '#0D111A', color: '#f3f4f6' });
+            } else {
+                alert('Error: ' + error.message);
+            }
+        }
     }
-});
+
+    function configurarFormularioServicio() {
+        const form = document.getElementById('formNuevoServicio');
+        
+        if (form) {
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+
+                const submitBtn = form.querySelector('button[type="submit"]');
+                if (submitBtn) {
+                    submitBtn.disabled = true;
+                    submitBtn.innerText = 'Guardando...';
+                }
+
+                const formData = new FormData();
+                formData.append('nombre', document.getElementById('nuevoNombre').value);
+                formData.append('precio', document.getElementById('nuevoPrecio').value);
+                formData.append('duracion', document.getElementById('nuevaDuracion').value);
+                
+                const archivoInput = document.getElementById('imagenServicio');
+                if (archivoInput && archivoInput.files[0]) {
+                    formData.append('imagen', archivoInput.files[0]);
+                }
+
+                const servicioId = document.getElementById('servicioId').value;
+                const url = servicioId ? `/admin/servicios/${servicioId}` : '/admin/servicios';
+                const method = servicioId ? 'PUT' : 'POST';
+
+                try {
+                    const response = await fetch(url, {
+                        method: method,
+                        body: formData
+                    });
+
+                    const result = await response.json();
+
+                    if (response.ok) {
+                        form.reset();
+                        document.getElementById('servicioId').value = '';
+                        
+                        if (typeof Swal !== 'undefined') {
+                            await Swal.fire({
+                                icon: 'success',
+                                title: '¡Éxito!',
+                                text: result.message || 'Servicio guardado correctamente.',
+                                confirmButtonColor: '#2563eb',
+                                background: '#0D111A',
+                                color: '#f3f4f6',
+                                timer: 1500,
+                                showConfirmButton: false
+                            });
+                        } else {
+                            alert('¡Éxito! Servicio guardado correctamente.');
+                        }
+                        
+                        // Actualizar la tabla sin recargar toda la página
+                        cargarServiciosDesdeBD();
+
+                    } else {
+                        throw new Error(result.error || 'No se pudo guardar el servicio.');
+                    }
+                } catch (error) {
+                    console.error('Error durante el guardado:', error);
+                    if (typeof Swal !== 'undefined') {
+                        Swal.fire({ icon: 'error', title: 'Atención', text: error.message, background: '#0D111A', color: '#f3f4f6' });
+                    } else {
+                        alert('Error: ' + error.message);
+                    }
+                } finally {
+                    if (submitBtn) {
+                        submitBtn.disabled = false;
+                        submitBtn.innerText = 'Guardar Servicio';
+                    }
+                }
+            });
+        }
+    }
 </script>
