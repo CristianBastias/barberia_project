@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const formServicio = document.getElementById('formServicio');
     if (formServicio) {
-        formServicio.addEventListener('submit', registrarServicio);
+        formServicio.addEventListener('submit', guardarServicio);
     }
 });
 
@@ -18,17 +18,34 @@ async function cargarServicios() {
 
         tbody.innerHTML = '';
         if (servicios.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="4" class="text-center py-6 text-slate-500">No hay servicios registrados.</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="5" class="text-center py-6 text-slate-500 italic">No hay servicios registrados.</td></tr>`;
             return;
         }
 
         servicios.forEach(s => {
             const tr = document.createElement('tr');
+            tr.className = "border-b border-slate-800/50 text-sm text-slate-300 hover:bg-slate-800/30 transition-all duration-150";
+            
+            const activo = s.activo == 1 || s.activo === true;
+            const estadoBadge = activo 
+                ? `<span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shadow-sm">Activo</span>`
+                : `<span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-rose-500/10 text-rose-400 border border-rose-500/20 shadow-sm">Inactivo</span>`;
+
+            const precioFormateado = Number(s.precio).toLocaleString('es-AR', { maximumFractionDigits: 0 });
+
             tr.innerHTML = `
-                <td class="py-4 px-4 font-mono text-xs text-slate-300">#${s.id}</td>
-                <td class="py-4 px-4 text-white font-medium">${s.nombre}</td>
-                <td class="py-4 px-4 font-mono text-emerald-400">$${Number(s.precio).toLocaleString()}</td>
-                <td class="py-4 px-4 text-slate-400 text-xs">${s.duracion_minutos ? s.duracion_minutos + ' mins' : 'N/D'}</td>
+                <td class="py-4 px-4 font-mono text-xs text-slate-400">#${s.id}</td>
+                <td class="py-4 px-4 text-white font-medium">${s.nombre} <div class="mt-1">${estadoBadge}</div></td>
+                <td class="py-4 px-4 font-mono text-emerald-400 font-semibold">$${precioFormateado}</td>
+                <td class="py-4 px-4 text-slate-400 text-xs">${s.duracion_minutos || s.duracion ? (s.duracion_minutos || s.duracion) + ' mins' : 'N/D'}</td>
+                <td class="py-4 px-4 text-right whitespace-nowrap space-x-2">
+                    <button type="button" onclick="prepararEditarServicio(${s.id}, '${s.nombre.replace(/'/g, "\\'")}', ${s.precio}, '${s.duracion_minutos || s.duracion || ''}')" class="bg-slate-950 hover:bg-amber-600/20 text-amber-400 border border-slate-800 hover:border-amber-500/30 p-2 rounded-xl transition-all shadow-sm cursor-pointer" title="Editar Servicio">
+                        <i class="fa-solid fa-pen-to-square text-xs"></i>
+                    </button>
+                    <button type="button" onclick="eliminarServicio(${s.id})" class="bg-slate-950 hover:bg-rose-600/20 text-rose-400 border border-slate-800 hover:border-rose-500/30 p-2 rounded-xl transition-all shadow-sm cursor-pointer" title="Eliminar / Desactivar">
+                        <i class="fa-solid fa-trash-can text-xs"></i>
+                    </button>
+                </td>
             `;
             tbody.appendChild(tr);
         });
@@ -37,28 +54,122 @@ async function cargarServicios() {
     }
 }
 
-async function registrarServicio(e) {
+async function guardarServicio(e) {
     e.preventDefault();
-    const nuevoServicio = {
-        nombre: document.getElementById('nombreServicio').value,
-        precio: document.getElementById('precioServicio').value,
-        duracion_minutos: document.getElementById('duracionServicio').value
-    };
+    
+    const id = document.getElementById('servicioIdEdit') ? document.getElementById('servicioIdEdit').value : '';
+    const nombre = document.getElementById('nombreServicio').value;
+    const precio = document.getElementById('precioServicio').value;
+    const duracion = document.getElementById('duracionServicio').value;
+
+    const datosServicio = { nombre, precio, duracion_minutos: duracion };
 
     try {
-        const response = await fetch('/api/servicios', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(nuevoServicio)
-        });
+        let response;
+        if (id) {
+            response = await fetch(`/admin/servicios/${id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(datosServicio)
+            });
+        } else {
+            response = await fetch('/admin/servicios', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(datosServicio)
+            });
+        }
 
-        if (!response.ok) throw new Error('No se pudo registrar el servicio');
+        if (!response.ok) throw new Error('No se pudo procesar la solicitud');
 
-        this.reset();
+        resetearFormularioServicio();
         cargarServicios();
-        alert('¡Servicio registrado con éxito!');
+        alert(id ? '¡Servicio actualizado con éxito!' : '¡Servicio registrado con éxito!');
     } catch (error) {
         console.error('Error:', error);
-        alert('Hubo un error al registrar el servicio.');
+        alert('Hubo un error al guardar el servicio.');
+    }
+}
+
+function prepararEditarServicio(id, nombre, precio, duracion) {
+    let inputId = document.getElementById('servicioIdEdit');
+    if (!inputId) {
+        // Creamos el campo oculto si no existe en el DOM
+        inputId = document.createElement('input');
+        inputId.type = 'hidden';
+        inputId.id = 'servicioIdEdit';
+        document.getElementById('formServicio').appendChild(inputId);
+    }
+    inputId.value = id;
+
+    document.getElementById('nombreServicio').value = nombre;
+    document.getElementById('precioServicio').value = precio;
+    const inputDuracion = document.getElementById('duracionServicio');
+    if (inputDuracion) inputDuracion.value = duracion;
+
+    // Cambios visuales en el contenedor del formulario (ESTILO NARANJA / ÁMBAR)
+    const cardForm = document.getElementById('formServicio').closest('div');
+    if (cardForm) {
+        cardForm.classList.remove('border-slate-800/80');
+        cardForm.classList.add('border-amber-500/50', 'bg-amber-950/10');
+    }
+
+    const btnSubmit = document.getElementById('btnSubmitServicio') || document.querySelector('#formServicio button[type="submit"]');
+    if (btnSubmit) {
+        btnSubmit.innerText = 'Actualizar Cambios';
+        btnSubmit.className = "bg-amber-600 hover:bg-amber-500 text-white font-medium px-4 py-2.5 rounded-xl text-sm transition-all shadow-md cursor-pointer w-full sm:w-auto";
+    }
+
+    const titulo = document.getElementById('formTituloServicio');
+    if (titulo) {
+        titulo.className = "text-sm font-semibold text-amber-400 uppercase tracking-wider flex items-center gap-2";
+        titulo.innerHTML = `<i class="fa-solid fa-pen-to-square"></i> Editando Servicio ID #${id} (Modo Edición Activo)`;
+    }
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function resetearFormularioServicio() {
+    const form = document.getElementById('formServicio');
+    if (form) form.reset();
+    
+    const inputId = document.getElementById('servicioIdEdit');
+    if (inputId) inputId.value = '';
+
+    const cardForm = form ? form.closest('div') : null;
+    if (cardForm) {
+        cardForm.classList.add('border-slate-800/80');
+        cardForm.classList.remove('border-amber-500/50', 'bg-amber-950/10');
+    }
+
+    const btnSubmit = document.getElementById('btnSubmitServicio') || document.querySelector('#formServicio button[type="submit"]');
+    if (btnSubmit) {
+        btnSubmit.innerText = 'Guardar Servicio';
+        btnSubmit.className = "bg-blue-600 hover:bg-blue-500 text-white font-medium px-4 py-2.5 rounded-xl text-sm transition-all shadow-md cursor-pointer w-full sm:w-auto";
+    }
+
+    const titulo = document.getElementById('formTituloServicio');
+    if (titulo) {
+        titulo.className = "text-sm font-semibold text-blue-400 uppercase tracking-wider flex items-center gap-2";
+        titulo.innerHTML = `<i class="fa-solid fa-circle-plus"></i> Registrar Nuevo Servicio`;
+    }
+}
+
+async function eliminarServicio(id) {
+    if (!confirm('¿Estás seguro de que deseas desactivar este servicio?')) return;
+
+    try {
+        const response = await fetch(`/admin/servicios/${id}`, { method: 'DELETE' });
+        const result = await response.json();
+        
+        if (response.ok) {
+            alert(result.message || 'Servicio dado de baja con éxito.');
+            cargarServicios(); 
+        } else {
+            throw new Error(result.error || 'No se pudo eliminar el servicio.');
+        }
+    } catch (error) {
+        console.error("Error al eliminar:", error);
+        alert('Error: ' + error.message);
     }
 }
