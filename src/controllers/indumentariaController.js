@@ -3,23 +3,9 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
-// Configuración de Multer para el almacenamiento de imágenes de indumentaria
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        const uploadDir = 'public/img/';
-        if (!fs.existsSync(uploadDir)) {
-            fs.mkdirSync(uploadDir, { recursive: true });
-        }
-        cb(null, uploadDir);
-    },
-    filename: (req, file, cb) => {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        cb(null, 'prenda-' + uniqueSuffix + path.extname(file.originalname));
-    }
-});
-
+// Configuración de Multer usando memoryStorage para compatibilidad con Vercel y local
 const upload = multer({ 
-    storage: storage,
+    storage: multer.memoryStorage(),
     limits: { fileSize: 5 * 1024 * 1024 }, // Límite de 5MB
     fileFilter: (req, file, cb) => {
         const filetypes = /jpeg|jpg|png|webp/;
@@ -33,7 +19,6 @@ const upload = multer({
 });
 
 class IndumentariaController {
-    // Middleware de subida para usar en las rutas
     uploadImage = upload.single('imagen');
 
     async obtenerTodas(req, res) {
@@ -56,7 +41,16 @@ class IndumentariaController {
 
             let imagen_url = null;
             if (req.file) {
-                imagen_url = `/img/${req.file.filename}`;
+                const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+                const filename = 'prenda-' + uniqueSuffix + path.extname(req.file.originalname);
+                const uploadDir = path.join('public', 'img');
+                
+                if (!fs.existsSync(uploadDir)) {
+                    fs.mkdirSync(uploadDir, { recursive: true });
+                }
+                
+                fs.writeFileSync(path.join(uploadDir, filename), req.file.buffer);
+                imagen_url = `/img/${filename}`;
             }
 
             await indumentariaRepository.crear({
@@ -83,15 +77,24 @@ class IndumentariaController {
                 return res.status(400).json({ error: "Faltan campos obligatorios" });
             }
 
-            // Obtener prenda actual para verificar si hay imagen previa que reemplazar
             const prendas = await indumentariaRepository.obtenerTodas();
             const prendaActual = prendas.find(p => p.id == id);
 
             let imagen_url = prendaActual ? prendaActual.imagen_url : null;
 
             if (req.file) {
-                imagen_url = `/img/${req.file.filename}`;
-                // Opcional: limpiar imagen anterior si existía y está en disco local
+                const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+                const filename = 'prenda-' + uniqueSuffix + path.extname(req.file.originalname);
+                const uploadDir = path.join('public', 'img');
+                
+                if (!fs.existsSync(uploadDir)) {
+                    fs.mkdirSync(uploadDir, { recursive: true });
+                }
+                
+                fs.writeFileSync(path.join(uploadDir, filename), req.file.buffer);
+                imagen_url = `/img/${filename}`;
+
+                // Limpiar imagen anterior si existía
                 if (prendaActual && prendaActual.imagen_url && prendaActual.imagen_url.startsWith('/img/')) {
                     const rutaAntigua = path.join('public', prendaActual.imagen_url);
                     if (fs.existsSync(rutaAntigua)) {
@@ -129,8 +132,6 @@ class IndumentariaController {
     async eliminar(req, res) {
         try {
             const { id } = req.params;
-            
-            // Buscar la prenda para borrar su archivo de imagen asociado si existe
             const prendas = await indumentariaRepository.obtenerTodas();
             const prenda = prendas.find(p => p.id == id);
 

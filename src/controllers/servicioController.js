@@ -1,4 +1,6 @@
 const servicioService = require('../services/servicioService');
+const fs = require('fs');
+const path = require('path');
 
 exports.listar = async (req, res) => {
     try {
@@ -13,7 +15,19 @@ exports.listar = async (req, res) => {
 exports.crear = async (req, res) => {
     try {
         const { nombre, precio, duracion } = req.body;
-        const imagen_url = req.file ? req.file.filename : null;
+        let imagen_url = null;
+
+        if (req.file) {
+            const filename = Date.now() + '-' + req.file.originalname;
+            const uploadDir = path.join('public', 'img');
+            
+            if (!fs.existsSync(uploadDir)) {
+                fs.mkdirSync(uploadDir, { recursive: true });
+            }
+            
+            fs.writeFileSync(path.join(uploadDir, filename), req.file.buffer);
+            imagen_url = filename; // O guarda el nombre que manejes habitualmente
+        }
 
         if (!nombre || !precio || !duracion) {
             return res.status(400).json({ error: 'Faltan campos obligatorios.' });
@@ -31,7 +45,19 @@ exports.actualizar = async (req, res) => {
     try {
         const { id } = req.params;
         const { nombre, precio, duracion } = req.body;
-        const imagen_url = req.file ? req.file.filename : null;
+        let imagen_url = null;
+
+        if (req.file) {
+            const filename = Date.now() + '-' + req.file.originalname;
+            const uploadDir = path.join('public', 'img');
+            
+            if (!fs.existsSync(uploadDir)) {
+                fs.mkdirSync(uploadDir, { recursive: true });
+            }
+            
+            fs.writeFileSync(path.join(uploadDir, filename), req.file.buffer);
+            imagen_url = filename;
+        }
 
         if (!nombre || !precio || !duracion) {
             return res.status(400).json({ error: 'Faltan campos obligatorios.' });
