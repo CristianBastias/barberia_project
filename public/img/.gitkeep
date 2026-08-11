@@ -1,0 +1,5 @@
+const fs = require('fs');
+const dir = './public/img';
+if (!fs.existsSync(dir)){
+    fs.mkdirSync(dir, { recursive: true });
+}
