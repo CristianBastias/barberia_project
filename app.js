@@ -39,9 +39,12 @@ app.use(session({
 // ==========================================
 // 3. ARCHIVOS ESTÁTICOS Y VISTAS DEL PORTAL
 // ==========================================
+
+// Ruta de Inicio (Corregida con filtro)
 app.get('/', async (req, res) => {
     try {
-        const [servicios] = await db.query('SELECT * FROM servicios');
+        // AHORA SOLO TRAE LOS ACTIVOS
+        const [servicios] = await db.query('SELECT * FROM servicios WHERE activo = 1');
         res.render('portal/index', { 
             servicios: servicios,
             title: 'Inicio | Búho Barber Studio' 
@@ -52,12 +55,19 @@ app.get('/', async (req, res) => {
     }
 });
 
-app.get('/reservar', (req, res) => {
-    res.render('portal/reservar');
-});
-
-app.get('/indumentaria', (req, res) => {
-    res.render('portal/indumentaria', { title: 'Catálogo de Indumentaria | Búho' });
+// Ruta del Catálogo (Corregida con filtro)
+app.get('/catalogo', async (req, res) => {
+    try {
+        // AHORA SOLO TRAE LOS ACTIVOS
+        const [servicios] = await db.query('SELECT * FROM servicios WHERE activo = 1');
+        
+        res.render('portal/catalogo', { 
+            title: 'Catálogo de Servicios | Búho',
+            servicios: servicios 
+        });
+    } catch (error) {
+        res.status(500).send('Error al cargar el catálogo');
+    }
 });
 
 // RUTA PÚBLICA SEGURA (Evita conflictos con el panel de administración)
@@ -71,6 +81,23 @@ app.get('/catalogo', async (req, res) => {
         });
     } catch (error) {
         res.status(500).send('Error al cargar el catálogo');
+    }
+});
+
+// NUEVA RUTA PARA EL MÓDULO DE RESERVAS PÚBLICO
+app.get('/reservar', async (req, res) => {
+    try {
+        const [servicios] = await db.query('SELECT * FROM servicios WHERE activo = 1');
+        const [barberos] = await db.query('SELECT * FROM barberos');
+
+        res.render('portal/reservar', { 
+            title: 'Reservar Turno | Búho Barber Studio',
+            servicios,
+            barberos
+        });
+    } catch (error) {
+        console.error('Error al cargar la vista de reserva:', error);
+        res.status(500).send('Error al cargar la página de reservas');
     }
 });
 

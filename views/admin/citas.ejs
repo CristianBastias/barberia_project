@@ -63,10 +63,14 @@
     </div>
 
     <!-- Resumen estadístico dinámico y actualizado -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4" id="stats-summary">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4" id="stats-summary">
         <div class="bg-slate-900 border border-slate-800 border-l-4 border-l-blue-500 rounded-2xl p-5 shadow-xl">
             <div class="text-2xl font-bold text-blue-400" id="stats-total">0</div>
             <div class="text-xs text-slate-400 uppercase tracking-wider mt-1">Total Turnos</div>
+        </div>
+        <div class="bg-slate-900 border border-slate-800 border-l-4 border-l-violet-500 rounded-2xl p-5 shadow-xl">
+            <div class="text-2xl font-bold text-violet-400" id="stats-hoy">0</div>
+            <div class="text-xs text-slate-400 uppercase tracking-wider mt-1">Turnos Hoy</div>
         </div>
         <div class="bg-slate-900 border border-slate-800 border-l-4 border-l-emerald-500 rounded-2xl p-5 shadow-xl">
             <div class="text-2xl font-bold text-emerald-400" id="stats-confirmados">0</div>
@@ -106,73 +110,7 @@
                     </tr>
                 </thead>
                 <tbody id="tabla-turnos" class="divide-y divide-slate-800 text-sm text-slate-300">
-                    <% if (typeof turnos !== 'undefined' && turnos.length > 0) { %>
-                        <% turnos.forEach(turno => { %>
-                            <tr class="hover:bg-slate-950/40 transition-colors">
-                                <!-- 1. ID -->
-                                <td class="py-4 px-6 font-mono text-xs text-slate-400">#<%= turno.id %></td>
-                                
-                                <!-- 2. Nombre (Leyendo cliente_nombre asegurando que no falle) -->
-                                <td class="py-4 px-6 font-semibold text-white">
-                                    <%= turno.cliente_nombre || turno.nombre || 'Cliente General' %>
-                                </td>
-                                
-                                <!-- 3. Fecha -->
-                                <td class="py-4 px-6 text-slate-300">
-                                    <%= turno.fecha_hora ? (typeof turno.fecha_hora === 'string' ? turno.fecha_hora.split('T')[0] : turno.fecha_hora.toISOString().split('T')[0]) : '' %>
-                                </td>
-                                
-                                <!-- 4. Hora -->
-                                <td class="py-4 px-6 font-medium text-slate-200">
-                                    <%= turno.fecha_hora ? (typeof turno.fecha_hora === 'string' && turno.fecha_hora.includes('T') ? turno.fecha_hora.split('T')[1].substring(0,5) : turno.fecha_hora.toTimeString?.().substring(0,5) || '') : '' %>
-                                </td>
-                                
-                                <!-- 5. Teléfono -->
-                                <td class="py-4 px-6 text-slate-300"><%= turno.telefono || 'Sin teléfono' %></td>
-                                
-                                <!-- 6. Servicio -->
-                                <td class="py-4 px-6 text-slate-300"><%= turno.servicio_nombre || 'Servicio #' + turno.servicio_id %></td>
-                                
-                                <!-- 7. Barbero -->
-                                <td class="py-4 px-6 text-slate-300"><%= turno.barbero_nombre || 'Barbero #' + turno.barbero_id %></td>
-                                
-                                <!-- 8. Estado -->
-                                <td class="py-4 px-6">
-                                    <% if (turno.estado === 'confirmado' || turno.estado === 'confirmada') { %>
-                                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                                            Confirmado
-                                        </span>
-                                    <% } else if (turno.estado === 'pendiente') { %>
-                                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-amber-500/10 text-amber-400 border border-amber-500/20">
-                                            Pendiente
-                                        </span>
-                                    <% } else { %>
-                                        <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-rose-500/10 text-rose-400 border border-rose-500/20">
-                                            Cancelado
-                                        </span>
-                                    <% } %>
-                                </td>
-                                
-                                <!-- 9. Acciones -->
-                                <td class="py-4 px-6 text-right">
-                                    <div class="flex items-center justify-end gap-2">
-                                        <button onclick="abrirModalEditar('<%= turno.id %>')" class="w-8 h-8 rounded-lg bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-400 hover:bg-blue-600 hover:text-white transition-all shadow-sm" title="Editar turno">
-                                            <i class="fa-solid fa-pen-to-square text-xs"></i>
-                                        </button>
-                                        <button onclick="eliminarTurno('<%= turno.id %>')" class="w-8 h-8 rounded-lg bg-rose-500/10 border border-rose-500/30 flex items-center justify-center text-rose-400 hover:bg-rose-600 hover:text-white transition-all shadow-sm" title="Eliminar turno">
-                                            <i class="fa-solid fa-trash-can text-xs"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        <% }) %>
-                    <% } else { %>
-                        <tr>
-                            <td colspan="9" class="py-8 text-center text-slate-500">
-                                No hay turnos registrados actualmente.
-                            </td>
-                        </tr>
-                    <% } %>
+                    <!-- Se llena dinámicamente mediante JS -->
                 </tbody>
             </table>
         </div>
@@ -254,87 +192,6 @@
     </div>
 </div>
 
-<script>
-    // Función para alternar la visibilidad del modal de forma segura
-    function toggleModal(modalId) {
-        const modal = document.getElementById(modalId);
-        if (modal) {
-            modal.classList.toggle('hidden');
-        }
-    }
-
-    // Función que procesa el guardado o actualización de la cita desde el panel
-    async function guardarEdicionTurno() {
-        const id = document.getElementById('editarTurnoId').value;
-        const fechaInput = document.getElementById('editarFecha').value;
-        const horaInput = document.getElementById('editarHora').value;
-        
-        if (!fechaInput || !horaInput) {
-            alert('Por favor complete la fecha y la hora.');
-            return;
-        }
-
-        const fecha_hora = `${fechaInput} ${horaInput}:00`;
-
-        const payload = {
-            nombre: document.getElementById('editarNombre').value,
-            telefono: document.getElementById('editarTelefono').value,
-            barbero_id: document.getElementById('editarBarberoId').value,
-            servicio_id: document.getElementById('editarServicioId').value,
-            fecha_hora: fecha_hora
-        };
-
-        try {
-            // Si hay un ID existente, se actualiza; de lo contrario, se crea
-            const url = id ? `/citas/${id}` : '/citas';
-            const method = id ? 'PUT' : 'POST';
-
-            const response = await fetch(url, {
-                method: method,
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
-
-            const result = await response.json();
-
-            if (response.ok) {
-                if (typeof Swal !== 'undefined') {
-                    Swal.fire({
-                        icon: 'success',
-                        title: '¡Éxito!',
-                        text: result.mensaje || 'Operación realizada correctamente.',
-                        confirmButtonColor: '#2563eb',
-                        background: '#0D111A',
-                        color: '#f3f4f6'
-                    }).then(() => {
-                        location.reload();
-                    });
-                } else {
-                    alert('Operación realizada correctamente.');
-                    location.reload();
-                }
-            } else {
-                throw new Error(result.error || 'No se pudo guardar la información.');
-            }
-        } catch (error) {
-            console.error('Error al guardar turno:', error);
-            if (typeof Swal !== 'undefined') {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Atención',
-                    text: error.message,
-                    confirmButtonColor: '#2563eb',
-                    background: '#0D111A',
-                    color: '#f3f4f6'
-                });
-            } else {
-                alert('Error: ' + error.message);
-            }
-        }
-    }
-</script>
-
-
 <!-- LOGICA DE SCRIPTS UNIFICADA -->
 <script>
     let todosLosTurnos = [];
@@ -385,20 +242,36 @@
         try {
             const response = await fetch('/citas');
             todosLosTurnos = await response.json(); 
-            aplicarFiltrosGlobales(); // Actualiza estadísticas, tabla y calendario según datos globales y filtros
+            aplicarFiltrosGlobales(); 
         } catch (error) {
             console.error("Error al cargar los turnos:", error);
         }
     }
 
     function actualizarEstadisticas(citas) {
-        let total = citas.length;
+        // Cálculo basado en el total general real (todosLosTurnos)
+        let total = todosLosTurnos.length;
+        let hoyCount = 0;
         let confirmados = 0;
         let pendientes = 0;
         let cancelados = 0;
 
-        citas.forEach(cita => {
+        const hoyStr = new Date().toISOString().split('T')[0];
+
+        todosLosTurnos.forEach(cita => {
             const est = (cita.estado || 'pendiente').toLowerCase();
+            
+            let fechaCitaStr = '';
+            if (cita.fecha_hora) {
+                fechaCitaStr = typeof cita.fecha_hora === 'string' ? cita.fecha_hora.split('T')[0] : new Date(cita.fecha_hora).toISOString().split('T')[0];
+            } else if (cita.fecha) {
+                fechaCitaStr = cita.fecha.split('T')[0];
+            }
+
+            if (fechaCitaStr === hoyStr && est !== 'cancelado') {
+                hoyCount++;
+            }
+
             if (est === 'confirmado' || est === 'completado') {
                 confirmados++;
             } else if (est === 'cancelado') {
@@ -409,6 +282,7 @@
         });
 
         document.getElementById('stats-total').innerText = total;
+        document.getElementById('stats-hoy').innerText = hoyCount;
         document.getElementById('stats-confirmados').innerText = confirmados;
         document.getElementById('stats-pendientes').innerText = pendientes;
         document.getElementById('stats-cancelados').innerText = cancelados;
@@ -427,7 +301,14 @@
             return;
         }
 
-        citas.forEach(cita => {
+        // ORDENAMIENTO REGRESIVO (Del más lejano/futuro al más antiguo, o por fecha/hora descendente)
+        const citasOrdenadas = [...citas].sort((a, b) => {
+            const fechaA = a.fecha_hora || `${a.fecha || ''} ${a.hora || ''}`;
+            const fechaB = b.fecha_hora || `${b.fecha || ''} ${b.hora || ''}`;
+            return new Date(fechaB) - new Date(fechaA); // Descendente (Regresivo)
+        });
+
+        citasOrdenadas.forEach(cita => {
             const tr = document.createElement('tr');
             tr.className = "border-b border-slate-800 text-sm text-slate-300 hover:bg-slate-950/40 transition-all";
             
@@ -487,7 +368,6 @@
                 `;
             }
 
-            // ORDEN ESTRICTO CORREGIDO: ID, Nombre, Fecha, Hora, Teléfono, Servicio, Barbero, Estado, Acciones
             tr.innerHTML = `
                 <td class="py-4 px-6 font-mono text-xs text-slate-400">#${cita.id}</td>
                 <td class="py-4 px-6 font-medium text-slate-200">${clienteNombre}</td>
@@ -567,7 +447,7 @@
             return cumpleEstado && cumpleCliente && cumpleTelefono;
         });
 
-        actualizarEstadisticas(todosLosTurnos); // Mantiene las tarjetas con el total general o se puede pasar resultadosFiltrados si prefieres métricas filtradas
+        actualizarEstadisticas(todosLosTurnos); 
         renderizarTabla(resultadosFiltrados);
         renderizarCalendario(resultadosFiltrados);
     }
@@ -604,90 +484,87 @@
     }
 
     async function guardarEdicionTurno() {
-    const id = document.getElementById('editarTurnoId').value;
-    const fechaInput = document.getElementById('editarFecha').value;
-    const horaInput = document.getElementById('editarHora').value;
-    
-    if (!fechaInput || !horaInput) {
-        if (typeof Swal !== 'undefined') {
-            Swal.fire({
-                icon: 'warning',
-                title: 'Campos incompletos',
-                text: 'Por favor complete la fecha y la hora.',
-                confirmButtonColor: '#2563eb',
-                background: '#0D111A',
-                color: '#f3f4f6'
-            });
-        } else {
-            alert('Por favor complete la fecha y la hora.');
-        }
-        return;
-    }
-
-    const fecha_hora = `${fechaInput} ${horaInput}:00`;
-
-    // CORREGIDO: Se asegura de capturar el nombre real ingresado en el input del modal
-    const payload = {
-        nombre: document.getElementById('editarNombre').value || 'Cliente General',
-        telefono: document.getElementById('editarTelefono').value || '',
-        barbero_id: document.getElementById('editarBarberoId').value,
-        servicio_id: document.getElementById('editarServicioId').value,
-        fecha_hora: fecha_hora,
-        metodo_pago: 'efectivo'
-    };
-
-    try {
-        const url = id ? `/citas/${id}` : '/citas';
-        const method = id ? 'PUT' : 'POST';
-
-        const response = await fetch(url, {
-            method: method,
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-        });
-
-        const result = await response.json();
-
-        if (response.ok) {
-            // Cierra el modal antes de mostrar la alerta o al confirmar
-            if (typeof toggleModal === 'function') {
-                toggleModal('modalEditarTurno');
-            }
-
-            // ALERTA DE ÉXITO AGREGADA
+        const id = document.getElementById('editarTurnoId').value;
+        const fechaInput = document.getElementById('editarFecha').value;
+        const horaInput = document.getElementById('editarHora').value;
+        
+        if (!fechaInput || !horaInput) {
             if (typeof Swal !== 'undefined') {
-                await Swal.fire({
-                    icon: 'success',
-                    title: '¡Operación Exitosa!',
-                    text: result.mensaje || 'El turno se guardó correctamente.',
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Campos incompletos',
+                    text: 'Por favor complete la fecha y la hora.',
                     confirmButtonColor: '#2563eb',
                     background: '#0D111A',
                     color: '#f3f4f6'
                 });
             } else {
-                alert('El turno se guardó correctamente.');
+                alert('Por favor complete la fecha y la hora.');
             }
-
-            location.reload(); // Recarga para reflejar el nombre real en la tabla
-        } else {
-            throw new Error(result.error || 'No se pudo guardar la información.');
+            return;
         }
-    } catch (error) {
-        console.error('Error al guardar turno:', error);
-        if (typeof Swal !== 'undefined') {
-            Swal.fire({
-                icon: 'error',
-                title: 'Atención',
-                text: error.message,
-                confirmButtonColor: '#2563eb',
-                background: '#0D111A',
-                color: '#f3f4f6'
+
+        const fecha_hora = `${fechaInput} ${horaInput}:00`;
+
+        const payload = {
+            nombre: document.getElementById('editarNombre').value || 'Cliente General',
+            telefono: document.getElementById('editarTelefono').value || '',
+            barbero_id: document.getElementById('editarBarberoId').value,
+            servicio_id: document.getElementById('editarServicioId').value,
+            fecha_hora: fecha_hora,
+            metodo_pago: 'efectivo'
+        };
+
+        try {
+            const url = id ? `/citas/${id}` : '/citas';
+            const method = id ? 'PUT' : 'POST';
+
+            const response = await fetch(url, {
+                method: method,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
             });
-        } else {
-            alert('Error: ' + error.message);
+
+            const result = await response.json();
+
+            if (response.ok) {
+                if (typeof toggleModal === 'function') {
+                    toggleModal('modalEditarTurno');
+                }
+
+                if (typeof Swal !== 'undefined') {
+                    await Swal.fire({
+                        icon: 'success',
+                        title: '¡Operación Exitosa!',
+                        text: result.mensaje || 'El turno se guardó correctamente.',
+                        confirmButtonColor: '#2563eb',
+                        background: '#0D111A',
+                        color: '#f3f4f6'
+                    });
+                } else {
+                    alert('El turno se guardó correctamente.');
+                }
+
+                location.reload(); 
+            } else {
+                throw new Error(result.error || 'No se pudo guardar la información.');
+            }
+        } catch (error) {
+            console.error('Error al guardar turno:', error);
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Atención',
+                    text: error.message,
+                    confirmButtonColor: '#2563eb',
+                    background: '#0D111A',
+                    color: '#f3f4f6'
+                });
+            } else {
+                alert('Error: ' + error.message);
+            }
         }
     }
-}
 
     async function cambiarEstadoCita(id, nuevoEstado) {
         try {
@@ -710,32 +587,31 @@
     }
 
     async function eliminarTurno(id) {
-    if (!confirm('¿Estás seguro de que deseas eliminar este turno?')) return;
+        if (!confirm('¿Estás seguro de que deseas eliminar este turno?')) return;
 
-    try {
-        const response = await fetch(`/citas/${id}`, { method: 'DELETE' });
-        
-        if (response.ok) {
-            // Alerta de éxito añadida
-            if (typeof Swal !== 'undefined') {
-                await Swal.fire({
-                    icon: 'success',
-                    title: '¡Eliminado!',
-                    text: 'El turno ha sido eliminado correctamente.',
-                    confirmButtonColor: '#2563eb',
-                    background: '#0D111A',
-                    color: '#f3f4f6'
-                });
+        try {
+            const response = await fetch(`/citas/${id}`, { method: 'DELETE' });
+            
+            if (response.ok) {
+                if (typeof Swal !== 'undefined') {
+                    await Swal.fire({
+                        icon: 'success',
+                        title: '¡Eliminado!',
+                        text: 'El turno ha sido eliminado correctamente.',
+                        confirmButtonColor: '#2563eb',
+                        background: '#0D111A',
+                        color: '#f3f4f6'
+                    });
+                } else {
+                    alert('El turno ha sido eliminado correctamente.');
+                }
+
+                cargarTurnosDesdeBD(); 
             } else {
-                alert('El turno ha sido eliminado correctamente.');
+                alert('No se pudo eliminar la cita.');
             }
-
-            cargarTurnosDesdeBD(); 
-        } else {
-            alert('No se pudo eliminar la cita.');
+        } catch (error) {
+            console.error("Error al eliminar:", error);
         }
-    } catch (error) {
-        console.error("Error al eliminar:", error);
     }
-}
 </script>

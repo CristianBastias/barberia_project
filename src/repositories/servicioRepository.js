@@ -2,10 +2,10 @@ const db = require('../config/db');
 
 class ServicioRepository {
     async obtenerTodos() {
-        const [servicios] = await db.query('SELECT * FROM servicios WHERE activo = 1 OR activo IS NULL');
-        return servicios;
+    // Si cambias esto a:
+    const [servicios] = await db.query('SELECT * FROM servicios WHERE activo = 1');
+    return servicios;
     }
-    
     async crear(data) {
         const { nombre, precio, duracion, imagen_url } = data;
         await db.query('INSERT INTO servicios (nombre, precio, duracion, imagen_url, activo) VALUES (?, ?, ?, ?, 1)', 
@@ -24,7 +24,6 @@ class ServicioRepository {
     }
     
     async eliminar(id) {
-        // Baja lógica en MySQL para que no se borre físicamente y mantenga la integridad
         const [result] = await db.query('UPDATE servicios SET activo = 0 WHERE id = ?', [id]);
         return result;
     }

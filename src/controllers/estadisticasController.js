@@ -6,29 +6,29 @@ const estadisticasController = {
         try {
             const [ingresosDiario] = await db.query(`
                 SELECT SUM(total_pagado) as total FROM citas 
-                WHERE DATE(fecha) = CURDATE() AND estado != 'cancelado'
+                WHERE DATE(fecha) = CURDATE() AND estado = 'completado'
             `);
 
             const [ingresosQuincenal] = await db.query(`
                 SELECT SUM(total_pagado) as total FROM citas 
-                WHERE fecha >= DATE_SUB(CURDATE(), INTERVAL 15 DAY) AND estado != 'cancelado'
+                WHERE fecha >= DATE_SUB(CURDATE(), INTERVAL 15 DAY) AND estado = 'completado'
             `);
 
             const [ingresosMensual] = await db.query(`
                 SELECT SUM(total_pagado) as total FROM citas 
-                WHERE MONTH(fecha) = MONTH(CURDATE()) AND YEAR(fecha) = YEAR(CURDATE()) AND estado != 'cancelado'
+                WHERE MONTH(fecha) = MONTH(CURDATE()) AND YEAR(fecha) = YEAR(CURDATE()) AND estado = 'completado'
             `);
 
             const [ingresosAnual] = await db.query(`
                 SELECT SUM(total_pagado) as total FROM citas 
-                WHERE YEAR(fecha) = YEAR(CURDATE()) AND estado != 'cancelado'
+                WHERE YEAR(fecha) = YEAR(CURDATE()) AND estado = 'completado'
             `);
 
             const [barberoEstrellaQuery] = await db.query(`
                 SELECT b.nombre, b.especialidad, COUNT(c.id) as serviciosCompletados, SUM(c.total_pagado) as recaudacionComision
                 FROM citas c
                 JOIN barberos b ON c.barbero_id = b.id
-                WHERE MONTH(c.fecha) = MONTH(CURDATE()) AND YEAR(c.fecha) = YEAR(CURDATE()) AND c.estado != 'cancelado'
+                WHERE MONTH(c.fecha) = MONTH(CURDATE()) AND YEAR(c.fecha) = YEAR(CURDATE()) AND c.estado = 'completado'
                 GROUP BY b.id
                 ORDER BY serviciosCompletados DESC
                 LIMIT 1
@@ -44,7 +44,7 @@ const estadisticasController = {
             const [horariosQuery] = await db.query(`
                 SELECT TIME_FORMAT(fecha, '%H:00') as hora, COUNT(*) as total 
                 FROM citas 
-                WHERE estado != 'cancelado'
+                WHERE estado = 'completado'
                 GROUP BY hora 
                 ORDER BY hora ASC
             `);
@@ -58,7 +58,7 @@ const estadisticasController = {
                 SELECT s.nombre, COUNT(c.id) as total 
                 FROM citas c
                 JOIN servicios s ON c.servicio_id = s.id
-                WHERE c.estado != 'cancelado'
+                WHERE c.estado = 'completado'
                 GROUP BY s.id, s.nombre
                 ORDER BY total DESC
                 LIMIT 5
@@ -72,7 +72,7 @@ const estadisticasController = {
             const [clientesQuery] = await db.query(`
                 SELECT nombre, telefono, COUNT(id) as totalVisitas, MAX(fecha) as ultimaVisita
                 FROM citas
-                WHERE estado != 'cancelado'
+                WHERE estado = 'completado'
                 GROUP BY telefono, nombre
                 ORDER BY totalVisitas DESC
                 LIMIT 10
