@@ -2,9 +2,9 @@ const express = require('express');
 const router = express.Router();
 const servicioController = require('../controllers/servicioController');
 
-// Middleware básico de respaldo por si multer no está definido
+// Middleware básico de respaldo ajustado para evitar error de escritura en disco en Vercel
 const multer = require('multer');
-const upload = multer({ dest: 'public/img/' }); // Guarda temporalmente las imágenes en public/img/
+const upload = multer({ storage: multer.memoryStorage() }); 
 
 router.get('/api/servicios', servicioController.listar);
 
